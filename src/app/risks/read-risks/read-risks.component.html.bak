@@ -1,0 +1,36 @@
+<div class="row m-b-18px">
+  <div class="col-md-12">
+      <!-- button to create new risk btn btn-primary pull-right-->
+      <button  style="color:white" (click)="createRisk()" class='btn btn-primary btn-lg btn-block bright-btn' [disabled]="startTripFlow==true">
+            <span class='fa fa-plus bright-btn'></span> Add Risk
+        </button>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+
+      <!-- HTML table for our list of risk records -->
+      <table  class='table table-hover table-striped'>
+
+          <!-- Use *ngFor directive to loop throught our list of risks. -->
+          <tr *ngFor="let risk of risks">
+            <td><a class="nav-link active" (click)="readOneRisk(risk.RiskID)">
+                    {{risk.RiskName}}
+                </a>
+            </td>
+            <td align="right">
+                  <!-- edit risk button  -->
+                  <button (click)="updateRisk(risk.RiskID)" class='btn btn-secondary m-r-5px' [disabled]="startTripFlow==true">
+                      <span class='fa fa-edit bright-btn' style="color:white"></span> 
+                  </button>
+
+                  <!-- delete risk button -->
+                  <button (click)="deleteRisk(risk.RiskID)" class='btn btn-danger' [disabled]="startTripFlow==true">
+                      <span class='fa fa-remove bright-btn' style="color:white"></span> 
+                  </button>
+            </td>
+          </tr>
+      </table>
+  </div>
+</div>

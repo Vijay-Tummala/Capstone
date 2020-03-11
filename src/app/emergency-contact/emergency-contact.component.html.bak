@@ -1,0 +1,261 @@
+
+
+
+
+<div class="modal" tabindex="-1" role="dialog" id="emergencyContact">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="CreateTripTitle">Emergency Contact Form</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+
+    </div>
+    <div class="modal-body" id="summary-modal" >
+
+
+            <table class="table table-hover">
+                    <tbody>
+                      <tr>
+                        <td style="border-top: none;">Field Activity Name</td>
+                        <td style="border-top: none;">
+                        <div class="form-group">   
+                        <input  type="text" class="form-control"   [(ngModel)]="field_activity" >
+                        </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Field Leader and Cell</td>
+                        <td>
+                        <div class="form-group">     
+                        <input  type="text" class="form-control"   [(ngModel)]="field_lead"  >
+                        </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Field dates</td>
+                        <td>
+                        <div class="form-group">    
+                        <input  type="text" class="form-control"   [(ngModel)]="field_date"  >
+                        </div>
+                        </td>
+                      </tr>
+<!--Communications-->
+
+                      <tr><td colspan="2" id="divider">Communications</td>
+                        </tr>
+
+                      <tr>
+                            <td>To the group</td>
+                            <td>
+                            <div class="form-group">    
+                            <input type="text" class="form-control"   [(ngModel)]="to_group"  >
+                            </div>
+                            </td>
+                    </tr>
+
+                    
+                    <tr>
+                            <td>From the group </td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="from_group"  >
+                            </div>
+                            </td>
+                    </tr>
+
+                    <tr>
+                            <td>Local Emergency Services</td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="local_em"  >
+                            </div>
+                            </td>
+                    </tr>
+
+                    <tr>
+                            <td>Country and district code</td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="code"  >
+                            </div>
+                            </td>
+                    </tr>
+
+
+                    <tr>
+                            <td>Planned Call-in times</td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="call_in"  >
+                            </div>
+                            </td>
+                    </tr>
+
+
+                    <tr>
+                            <td>On Call Support Name and No.</td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="on_call"  >
+                            </div>
+                            </td>
+                    </tr>
+
+                    <tr>
+                            <td>Insurance </td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="insurance"  >
+                            </div>
+                            </td>
+                    </tr>
+
+                    <tr>
+                            <td>ISOS Number and Account:</td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="isos_num"  >
+                            </div>
+                            </td>
+                    </tr>
+
+
+                    <tr><td colspan="2" id="divider">Medical</td>
+                    </tr>
+
+                    <tr>
+                            <td>First Aid trained staff</td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="first_aid"  >
+                            </div>
+                            </td>
+                    </tr>
+                    <tr>
+                            <td>First Aid kits</td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="kits"  >
+                            </div>
+                            </td>
+                    </tr>
+                    <tr>
+                            <td>Nearest doctor or medical centre</td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="medical_centre"  >
+                            </div>
+                            </td>
+                    </tr>
+                    <tr>
+                            <td>Nearest major hospital</td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="hospital"  >
+                            </div>
+                            </td>
+                    </tr>
+                    <tr>
+                            <td>Location of definitive care</td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="definitive_care"  >
+                            </div>
+                            </td>
+                    </tr>
+                    <tr>
+                            <td>Location of closest pharmacy</td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="pharmacy"  >
+                            </div>
+                            </td>
+                    </tr>
+
+                    <tr><td colspan="2" id="divider">Incident Management Chain of Command</td>
+                    </tr>
+
+                    
+                    <tr>
+                            <td>Initial Response actions</td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="response"  >
+                            </div>
+                            </td>
+                    </tr>
+                    <tr>
+                            <td>Escalate to Crisis Centre if</td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="escalate_to_crisis"  >
+                            </div>
+                            </td>
+                    </tr>
+                    <tr>
+                            <td>What to say to the Crisis Centre</td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="say_at_crisis"  >
+                            </div>
+                            </td>
+                    </tr>
+
+                    <tr><td colspan="2" id="divider">Transport</td>
+                    </tr>
+                    <tr>
+                            <td>Transport options </td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="transport"  >
+                            </div>
+                            </td>
+                    </tr>
+                    <tr>
+                            <td>Local logistical support </td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="logistical"  >
+                            </div>
+                            </td>
+                    </tr>
+                    <tr>
+                            <td>Other Support</td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="other"  >
+                            </div>
+                            </td>
+                    </tr>
+                    <tr>
+                            <td>Accommodation</td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="accommodation"  >
+                            </div>
+                            </td>
+                    </tr>
+                    <tr>
+                            <td>Participant contact details</td>
+                            <td>
+                            <div class="form-group">    
+                            <input  type="text" class="form-control"   [(ngModel)]="contact_detail"  >
+                            </div>
+                            </td>
+                    </tr>
+
+                    </tbody>
+                  </table>
+ 
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary mr-auto" data-toggle="modal" data-target="#StopSummaryModal" data-dismiss="modal">Previous</button>
+      <button type="button" class="btn btn-primary float-right" data-dismiss="modal" data-toggle="modal" data-target="#addUser" (click)="addEmergencyContact()">Next</button>
+    </div>
+  </div>
+</div>
+</div>
+
+

@@ -1,0 +1,911 @@
+import { Component, OnInit, Input, Output, OnChanges, EventEmitter } from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {MapserviceService} from '../mapservice.service';
+import { Router } from '@angular/router';
+//import * as $ from 'jquery';
+import * as bootstrap from 'bootstrap';
+import {Trip} from '../Trip';
+//import * as myGlobals from '../globals';
+import 'rxjs/add/operator/mergeMap';
+import { AuthService } from '../shared/auth/auth.service';
+import {Subject} from 'rxjs/Subject';
+import {DatepickerOptions} from 'ng2-datepicker';
+import * as frLocale from 'date-fns/locale/fr';
+import {IMyDpOptions} from 'mydatepicker';
+
+
+declare const google: any;
+
+@Component({
+  selector: 'app-map',
+  templateUrl: './map.component.html',
+  styleUrls: ['./map.component.css'], 
+  providers: [MapserviceService]
+})
+export class MapComponent implements OnInit {
+
+  @Output() show_read_stops_event = new EventEmitter();
+
+  public myDatePickerOptions: IMyDpOptions = {
+    // other options...
+    dateFormat: 'yyyy-mm-dd',
+};
+
+  public isLoggedIn;
+  public trip;
+  public tripbyid;
+  public updatetripid;
+  public map;
+  public mapProp;
+  public card;
+  public newmap;
+  public input;
+  public searchBox;
+  public start;
+  public end;
+  public stoplocation;
+  public stoplocationbox;
+  public start_lat;
+  public end_lat;
+  public start_long;
+  public end_long;
+  public locationBox;
+  public location;
+  public stop_lat;
+  public stop_long;
+
+  public markers = [];
+  public stoparray = []
+
+  public tripId;
+  public stopId;
+  public showstops;
+  //labelIndex : any;
+  trip_name : string;
+  description : string;
+  start_date : string;
+  end_date : string;
+//stop data
+  stop_name;
+  stop_description;
+  stop_location;
+  stop_latitude;
+  stop_longitude;
+
+  //Stop array and values from created stop
+
+  stops= [];
+
+  // For startTripFlow:
+  sts1 = [];
+  sts = [];
+
+  stopid;
+  tripid;
+  index;
+
+  //risk tripid and stopid for individual stop
+  riskTripID="";
+  riskStopID="";
+  viewTripID="0";
+  viewStopID="0";
+  tripData: Trip;
+
+
+//Check Condition
+
+isReadonly=false;
+isEdit = false;
+isCreateSuccessful = false;
+isUpdateSuccessful = false;
+isStartTripFlow = false;
+startTripFlow = false;
+
+//toggle conditions
+isActive=true;
+isEditTrip=false;
+isStopRiskEdit=false;
+isTripRiskEdit=false;
+isStopTaskEdit=false;
+  
+  public labels = ['A','A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+  public labelIndex = 0
+  //public long;
+  
+  public i =0;
+  public prev = 0;
+
+  public geocoder = new google.maps.Geocoder();
+
+  public infowindow = new google.maps.InfoWindow;
+
+  constructor(
+              private activeRoute:ActivatedRoute, 
+              private mapServicing: MapserviceService,
+              private router: Router,
+              private authService: AuthService,
+  ) {
+
+    //var lat;
+    //var long;
+    authService.isAuthenticated()
+    .subscribe(
+      success => this.isLoggedIn = success
+    )
+   }
+
+   activeButton() {
+     this.isActive=!this.isActive;
+   }
+
+   logout(){
+    this.authService.logout();
+    this.router.navigate(['landing']);
+  }
+
+  login()
+  {
+    this.router.navigate(['login']);
+    console.log("Hi");
+  }
+
+  readStops(){
+    this.show_read_stops_event.emit();
+} 
+
+//user clicks View Trip Data menu
+  viewTripData(trip) {
+      //add logic to capture tripID here
+      this.tripData = trip;
+      console.log("testing view trip id in map component: " + this.viewTripID);
+  }
+
+  editTripData(trip) {
+    //add logic to capture tripID here
+    this.tripData = trip;
+    this.isStopRiskEdit=true;
+    this.isStopTaskEdit=true;
+    this.isTripRiskEdit=true;
+    this.isEditTrip=true;
+    console.log("testing edit trip id in map component: " + this.isEditTrip);
+}
+    // user clicks the 'read risks' button
+    readRisks(stop){
+      this.riskTripID=stop[0].TripID;
+      this.riskStopID=stop[0].StopID;
+      this.startTripFlow=this.isStartTripFlow;
+
+      console.log("tripid onclick testing in map " + this.riskTripID);
+      console.log("stopid onclick testing in map " + this.riskStopID);
+      console.log("testing for start trip flow map " + this.startTripFlow);
+    }
+
+        // user clicks the 'read risks' button
+    readTripRisks(){
+      this.riskTripID=this.tripId;
+
+      console.log("tripid onclick testing in map for trip risk " + this.riskTripID);
+    }
+
+    createTrip(){
+
+      this.isStartTripFlow = false;
+      this.stops = [];
+    
+      const newTrip = {
+  
+        trip_name : this.trip_name,
+        description : this.description,
+        start_date : this.start_date["formatted"],
+        end_date : this.end_date["formatted"]
+
+      }
+
+      console.log(newTrip)
+      this.mapServicing.createNewTrip(newTrip).subscribe(
+        res =>{
+      
+          this.tripId = res;
+          console.log(this.tripId)
+      });
+    }
+  
+  
+
+  autocomplete()
+  {
+
+    var pacContainerInitialized = false; 
+                        $('#stop_location').keypress(function() { 
+                                if (!pacContainerInitialized) { 
+                                        $('.pac-container').css('z-index', '9999'); 
+                                        pacContainerInitialized = true; 
+                                } 
+                        }); 
+    console.log("Entered autocomplete")
+    var locationmap = this.map
+    var searchStop = document.getElementById('stop_location')
+    console.log("searchStop:",searchStop);
+    
+    var searchStopBox = new google.maps.places.SearchBox(searchStop);
+    console.log(searchStopBox);
+  }
+
+  save()
+  {
+    var saveMap = this.map
+    var newgeocoder = this.geocoder
+    var location = $("#stop_location").val()
+    this.stop_lat = ($( "#lat" ).val())
+    this.stop_long = ($( "#lng" ).val())
+    console.log(location)
+    console.log
+    if(location != "" && this.stop_lat != "")
+    {
+      console.log("Went in")
+      //directly save to databse
+    }
+    else if(location != ""){
+      
+      this.geocodeAddress(this.geocoder, this.map, location); 
+    }
+
+    else if(this.stop_lat != ""){
+      
+      var location1 = {lat: parseFloat(this.stop_lat), lng: parseFloat(this.stop_long)};
+      console.log(location1);
+      this.geocodeLatLng(this.geocoder, this.map, this.infowindow, location1);
+
+    }
+  }
+
+  //create stop
+
+
+  createStop(){
+    this.isReadonly = false;
+    console.log("isread:",this.isReadonly);
+    this.isCreateSuccessful = true;
+    var saveMap = this.map
+    var newgeocoder = this.geocoder
+    var location = $("#stop_location").val()
+    this.stop_lat = ($( "#lat" ).val())
+    this.stop_long = ($( "#lng" ).val())
+
+    //this.save();
+
+    let newStop = {
+  
+      StopName : ($("#stopName").val()),
+      Description : ($("#stopDesc").val()),
+      Lat : ($( "#lat" ).val()),
+      Lng : ($( "#lng" ).val()),
+      TripID: this.tripId,
+      Location : ($("#stop_location").val())
+  
+    };
+
+
+    console.log("new stop: "+newStop);
+  
+     this.mapServicing.addNewStop(newStop).map(res => res.json()).mergeMap(
+      res => this.mapServicing.getStopByStopID(res))
+     .subscribe(
+      data => {this.stops.push(data);
+        console.log("stops from stop.ts",this.stops); 
+        this.stopId = this.stops[0][0].StopID;
+        
+
+        console.log("stopId in stop: " + this.stopId);
+        console.log("tripId in stop: " + this.stops[0][0].TripID);
+      });
+      
+  }
+
+  // For StartTripFlow:
+  getStopsByTrip(trip_id) {
+    this.isStartTripFlow = true;
+    console.log("Coming within getStopsBy trip ID");
+    //alert('Starting the trip .... \n' + 'To Complete the task click on specify task from Stop-summary window')
+    this.mapServicing.getStops(trip_id)
+    .subscribe(sts1 => {
+      
+      //console.log(sts1);
+      this.sts1=sts1;
+      for (var each in this.sts1){
+        console.log(each);
+        console.log("can come till here ...");
+        let arr1 = [];
+        arr1[0] = sts1[each];
+        this.stops.push(arr1);
+    }
+    console.log(this.stops);
+    });
+    console.log("Printing this line : " + this.stops[0][0].StopName);
+  }
+  
+
+  createFromEditStop(){
+    this.isReadonly = false;
+    console.log("isread:",this.isReadonly);
+    this.isCreateSuccessful = true;
+
+    this.save();
+
+    let newStop = {
+  
+      StopName : this.stop_name,
+      Description : this.stop_description,
+      Lat : ($( "#lat" ).val()),
+      Lng : ($( "#lng" ).val()),
+      TripID: this.viewTripID,
+      Location : this.stop_location
+  
+    };
+    
+
+    console.log("new stop: "+newStop);
+  
+     this.mapServicing.addNewStop(newStop).map(res => res.json()).mergeMap(
+      res => this.mapServicing.getStopByStopID(res))
+     .subscribe(
+      data => {this.stops.push(data);
+        console.log("stops from stop.ts",this.stops); 
+        this.stopId = this.stops[0][0].StopID;
+        this.viewStopID=this.stops[0][0].StopID;
+        
+
+        console.log("stopId in stop: " + this.stopId);
+        console.log("stopId in viewstopid: " + this.viewStopID); 
+        console.log("tripId in stop: " + this.stops[0][0].TripID);
+      });
+      
+  }
+
+  //Update stop
+
+  removeStop(stop){
+    this.isReadonly = false;
+    console.log("stop in remove",stop[0].StopID);
+    this.mapServicing.deleteStopByStopID(stop[0].StopID).subscribe(
+      res=>{
+        let index = this.stops.indexOf(stop);
+        this.stops.splice(index, 1);
+      }
+    );
+  }
+  
+  viewStop(stop){
+    this.isEdit = false;
+    this.refreshData(stop);
+    this.isReadonly = true;
+  }
+  
+  
+  editStop(stop){
+    this.isReadonly = false;
+    this.isEdit = true;
+    this.stopid = stop[0].StopID;
+    this.tripid = stop[0].TripID;
+    this.index = this.stops.indexOf(stop[0]);
+  }
+  
+  updateStop(data){
+    this.isReadonly = false;
+    console.log("inside update updated data",data);
+    let updatedStop = {
+  
+      StopName : data.stopName,
+      Description : data.stopDesc,
+      Lat : data.lat,
+      Lng : data.lng,
+      TripID: this.tripid,
+      Location : data.stopLocation,
+      StopID: this.stopid
+  
+    };
+
+	if(!this.isEditTrip){
+    	this.updateData(data);
+	}
+  
+    console.log("after setting name",this.stop_name);
+    console.log("after setting stopid",this.stopid);
+    this.mapServicing.updateStopByStopID(updatedStop,this.stopid).subscribe(
+      res=>{
+      }
+    );
+  } 
+  
+  refreshData(stop){
+    this.stop_name = stop[0].StopName;
+    this.stop_description = stop[0].Description;
+    this.stop_latitude = stop[0].Lat;
+    this.stop_longitude = stop[0].Lng;
+    this.stop_location = stop[0].Location;
+  }
+  
+  clearFields(){
+    this.stop_name = '';
+    this.stop_description = '';
+    this.stop_latitude = '';
+    this.stop_longitude = '';
+    this.stop_location = '';
+    
+  
+  }
+  
+  
+  changeSetting(){
+    this.isReadonly = false;
+    this.clearFields();
+    this.isCreateSuccessful = false;
+    this.isUpdateSuccessful = false;
+    this.isEdit = false;
+  }
+  
+  
+  updateData(data){
+    this.isUpdateSuccessful = true;
+    let newUpdatedStop = {
+      StopName : data.stopName,
+      Description : data.stopDesc,
+      Lat : data.lat,
+      Lng : data.lng,
+      TripID: this.tripid,
+      Location : data.stopLocation
+  
+    };
+    console.log("testing updateData: " + newUpdatedStop);
+    this.stops[this.index]=newUpdatedStop;
+    console.log("testing updateData1: " + this.stops[this.index]);
+  }
+
+
+  searchMap()
+  {
+    var c;
+    var a;
+    a = this.labels
+
+    console.log(this.labelIndex++)
+    var b = this.labelIndex
+    
+    
+      $('#IndividualStopModal').modal('hide')
+      var finalmap= this.map
+      google.maps.event.clearListeners(finalmap, 'click');
+   
+      var newgeocoder = this.geocoder
+      google.maps.event.addListener(finalmap, 'click', function(event) {
+
+        var lat_1 = event.latLng.lat();
+        var lng_1 = event.latLng.lng();
+
+        $("#lat").val(lat_1)
+        $("#lng").val(lng_1)
+
+        var location2 = {lat: parseFloat(lat_1), lng: parseFloat(lng_1)}
+
+        console.log(location2)
+
+        newgeocoder.geocode({'location': location2}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+
+              $("#stop_location").val(results[0].formatted_address)
+              
+
+
+
+              console.log(a)
+          console.log(b)
+
+        c= a[b]
+        console.log("The label" + c)
+
+        addMarker(event.latLng, finalmap, c)
+        //k = k+1;
+        $('#IndividualStopModal').modal('show')
+            } 
+          }
+        });
+      });
+
+
+
+    function addMarker(location, map, c) 
+    {
+     
+      
+        
+        console.log("Value entered")
+          var marker = new google.maps.Marker({
+          position: location,
+          label: c,
+          map: map
+        });
+        
+
+      
+      
+    }  
+  
+  }
+
+
+
+
+  loadtripdetails(tripid)
+  {
+    var newmarkerarray = [];
+    var newmarkers = this.markers
+    console.log(this.map)
+    var newMap = this.map
+    console.log(tripid)
+    this.updatetripid = tripid
+    
+    this.mapServicing.getTripById(tripid).subscribe(
+      res =>{
+    
+      this.tripbyid = res;
+      console.log(this.tripbyid);
+        var id = this.tripbyid[0]["TripID"]
+        console.log(id)
+      this.mapServicing.getStops(id).subscribe(
+        res =>{
+          this.showstops = res;
+          console.log(this.showstops)
+          var neighborhoods = []
+          
+          var labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+          for (var eachstop of this.showstops){
+            console.log(eachstop.Lat)
+            console.log(eachstop.Lng)
+            //console.log(labels[labelcount])
+            var latlng = {lat: eachstop.Lat, lng: eachstop.Lng, stopid: eachstop.StopID}
+            neighborhoods.push(latlng)
+            //labelcount =  labelcount +1;
+          }
+          console.log(neighborhoods)
+          
+          
+          var labelcount = 0
+          clearMarkers();
+          for (var i = 0; i < neighborhoods.length; i++) {
+            var labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+            console.log("went in")
+            addMarkerWithTimeout({lat: neighborhoods[i]["lat"], lng: neighborhoods[i]["lng"]}, i * 200, labels[labelcount], neighborhoods[i]["stopid"]);
+            labelcount = labelcount + 1
+          }
+
+          function addMarkerWithTimeout(position, timeout, label, stopid) {
+            console.log("Went in again")
+            window.setTimeout(function() {
+              
+              newmarkers.push(new google.maps.Marker({
+                position: position,
+                map: newMap,
+                label: label,
+                animation: google.maps.Animation.DROP, 
+                stopid: stopid
+              }));
+              
+             //console.log(newmarkers)
+             //var markerarray = []
+           for (var each of newmarkers){
+            each.addListener('click', function() {
+              newmarkerarray.push(each.stopid)
+              console.log(newmarkerarray)
+              
+              google.maps.event.clearListeners(newMap, 'click');
+
+            });
+            
+           
+           }
+
+              //this.stoparray = newmarkers
+              //console.log(this.stoparray)
+              //displaystops(this.stoparray)
+            }, timeout);
+
+            
+            
+          }
+    
+          /*function displaystops(stoparray){
+            console.log(stoparray)
+            for (var eachstop of stoparray){
+             eachstop.addListener('click', function() {
+                console.log(eachstop)
+            });
+            }
+            
+          }*/
+          
+          
+          function clearMarkers() {
+            console.log("Went in clear")
+            console.log(newmarkers.length)
+            for (var i = 0; i < newmarkers.length; i++) {
+              newmarkers[i].setMap(null);
+            }
+            newmarkers = [];
+          }
+        })
+      //$('#TripModal').modal('show');
+ 
+      
+       
+    });
+    
+    
+  }
+  
+  refreshTrips(){
+    this.mapServicing.getTrip().subscribe(
+      res =>{
+    
+      this.trip = res;
+      console.log(this.trip)
+      
+      for (var each of this.trip){
+          console.log(each.TripName)
+      }    
+    });
+  }
+  
+  
+
+
+  updateTrip(){
+    console.log(this.updatetripid)
+  }
+
+  
+  geocodeLatLng(geocoder, map, infowindow, location1) {
+
+    var c;
+    var a;
+    a = this.labels
+
+    console.log(this.labelIndex++)
+    var b = this.labelIndex
+
+    var latlng = location1;
+    geocoder.geocode({'location': latlng}, function(results, status) {
+      if (status === 'OK') {
+        if (results[0]) {
+          map.setZoom(11);
+          c = a[b]
+          var marker = new google.maps.Marker({
+            position: latlng,
+            map: map,
+            label: c
+          });
+          infowindow.setContent(results[0].formatted_address);
+          console.log(results[0].formatted_address)
+          $('#stop_location').val(results[0].formatted_address);
+          infowindow.open(map, marker);
+        } else {
+          //window.alert('No results found');
+        }
+      } else {
+        //window.alert('Geocoder failed due to: ' + status);
+      }
+    });
+  }
+
+  geocodeAddress(geocoder, resultsMap, location) 
+  {
+
+
+    var c;
+    var a;
+    a = this.labels
+    //console.log(a)
+    console.log(this.labelIndex++)
+    var b = this.labelIndex
+
+    var address = location 
+    console.log(address)
+    geocoder.geocode({'address': address}, function(results, status) {
+      if (status === 'OK') {
+        resultsMap.setCenter(results[0].geometry.location);
+        console.log(results[0].geometry.location)
+        var loc =[]
+        loc[0]=results[0].geometry.location.lat();
+        loc[1]=results[0].geometry.location.lng();
+        console.log(loc[0])
+        console.log(loc[1])
+        $('#lat').val(loc[0]);
+        $('#lng').val(loc[1]);
+        console.log( $('#lat').val(loc[0]))
+      console.log($('#lng').val(loc[1]))
+
+        c = a[b]
+        var marker = new google.maps.Marker({
+          map: resultsMap,
+          position: results[0].geometry.location, 
+          label:c
+        
+        });
+        
+      } else {
+        //alert('Geocode was not successful for the following reason: ' + status);
+      }
+      //return results;
+    });
+  }
+
+
+
+  getstartlocation(){
+    
+    console.log($( "#start_location" ).val())
+    this.start = ($( "#start_location" ).val())
+    this.geocodeAddress(this.geocoder, this.map, this.start)
+  }
+
+  getstartlatitude(){
+    
+    console.log($("#start_latitude").val())
+    console.log($("#start_longitude").val())
+    this.start_lat = ($( "#start_latitude" ).val())
+    this.start_long = ($( "#start_longitude" ).val())
+    var location1 = {lat: parseFloat(this.start_lat), lng: parseFloat(this.start_long)}
+    this.geocodeLatLng(this.geocoder, this.map, this.infowindow, location1)
+
+   }
+   
+
+  
+  
+  ngOnInit() {
+
+    var label = ['A','B','C', 'D', 'E', 'F']
+    var labelIndex = 0;
+    //$('.modal').modal();
+
+    this.mapServicing.getTrip().subscribe(
+      res =>{
+    
+      this.trip = res;
+      console.log(this.trip)
+      
+      for (var each of this.trip){
+          console.log(each.TripName)
+      }    
+    });
+
+    
+
+    this.mapProp = {
+      //removed to enable current geolocation and vice versa
+      center: new google.maps.LatLng(51.508742, -0.120850),
+      zoom: 15,
+      mapTypeId: 'roadmap'
+      
+      
+  };
+
+ 
+  
+  this.map = new google.maps.Map(document.getElementById("googleMap"), this.mapProp);
+  this.card = document.getElementById('pac-card');
+
+  this.input = document.getElementById('searchBox');
+  console.log(this.input)
+
+  this.searchBox = new google.maps.places.SearchBox(this.input);
+
+  this.map.controls[google.maps.ControlPosition.LEFT_TOP].push(this.card);
+
+
+
+
+  var finalbox = this.searchBox
+
+  var finalmap = this.map
+  this.map.addListener('bounds_changed', function() {
+    console.log("New change Listener entered")
+   finalbox.setBounds(finalmap.getBounds());
+
+  });
+
+  
+
+  var markers = [];
+  
+  finalbox.addListener('places_changed', function() {
+    var places = finalbox.getPlaces();
+
+    if (places.length == 0) {
+      return;
+    }
+
+    // Clear out the old markers.
+    markers.forEach(function(marker) {
+      marker.setMap(null);
+    });
+    markers = [];
+
+    // For each place, get the icon, name and location.
+    var bounds = new google.maps.LatLngBounds();
+    places.forEach(function(place) {
+      if (!place.geometry) {
+        console.log("Returned place contains no geometry");
+        return;
+      }
+      var icon = {
+        url: place.icon,
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(25, 25)
+      };
+
+      // Create a marker for each place.
+      markers.push(new google.maps.Marker({
+        map: finalmap,
+        icon: icon,
+        title: place.name,
+        position: place.geometry.location
+      }));
+
+      if (place.geometry.viewport) {
+        // Only geocodes have viewport.
+        bounds.union(place.geometry.viewport);
+      } else {
+        bounds.extend(place.geometry.location);
+      }
+    });
+    finalmap.fitBounds(bounds);
+  });
+
+
+
+
+  /*var infoWindow;
+   //var bangalore = { lat: 12.97, lng: 77.59 };
+ 
+
+
+  infoWindow = new google.maps.InfoWindow;
+
+    // Try HTML5 geolocation.
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+
+        infoWindow.setPosition(pos);
+        infoWindow.setContent('Location found.');
+        infoWindow.open(finalmap);
+        finalmap.setCenter(pos);
+      }, function() {
+        handleLocationError(true, infoWindow, finalmap.getCenter());
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      handleLocationError(false, infoWindow, finalmap.getCenter());
+    }
+  
+
+  function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(browserHasGeolocation ?
+                          'Error: The Geolocation service failed.' :
+                          'Error: Your browser doesn\'t support geolocation.');
+    infoWindow.open(finalmap);
+  }*/
+
+}
+  
+
+
+
+}

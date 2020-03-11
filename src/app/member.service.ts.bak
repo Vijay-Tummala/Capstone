@@ -1,0 +1,26 @@
+import { Injectable } from '@angular/core';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import { Member } from './member';
+
+@Injectable()
+export class MemberService {
+
+  constructor(private _http : Http) { }
+
+      // Send user data to remote server to create it.
+      createMember(member): Observable<Member>{
+    
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+  
+        return this._http.post(
+            "http://13.59.46.246:3000/Members/addMember",
+            member,
+            options
+        ).map(res => res.json());
+      }
+
+}

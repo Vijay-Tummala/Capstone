@@ -1,0 +1,92 @@
+<div class="row m-b-18px">
+    <div class="col-md-12">
+        <a style="color:white" (click)="readTasks()" class='btn btn-danger pull-right'>
+            <span class='fa fa-list bright-btn'></span> Back to Tasks Assessment
+        </a>
+    </div>
+  </div>
+  
+  <div class="row">
+  <div class="col-md-12">
+  
+  <!-- HTML form for creating a risk -->
+  <form [formGroup]="update_task_form" (ngSubmit)="updateTask()">
+  <table class='table table-hover text-right'>
+  
+    <tr>
+        <td>Task Description</td>
+        <td>
+            <input formControlName="Description"
+                type='text' name='Description'
+                class='form-control' value={{taskData?.Description}} required />
+            
+        </td>
+    </tr>
+  
+    <tr>
+      <td>Task Category</td>
+      <td>
+          <input
+
+              formControlName="Category"
+              type='text' name='Category'
+              class='form-control' value={{taskData?.Category}} required />
+      </td>
+    </tr>
+    
+    <tr>
+            <td>
+                <label for="QuestionType">
+                        Question Type
+                </label>
+            </td>
+            <td>
+                
+                <select id="QuestionType" formControlName="QuestionType" class="form-control" value={{taskData?.QuestionType}}>
+                <option value="Take a photo">Take a photo</option>
+                <option value="Measure Dip and Strike" selected="selected">Measure Dip and Strike</option>
+                <option value="Paleocurrent">Paleocurrent</option>
+                <option value="Notes">Notes</option>
+                </select>
+                
+            </td>
+    </tr>
+
+    <!--
+    <tr>
+        <td>Task Question Type</td>
+        <td>
+            <input
+  
+                formControlName="QuestionType"
+                type='text' name='QuestionType'
+                class='form-control' value={{taskData?.QuestionType}} required />
+        </td>
+    </tr>
+-->
+
+    <tr>
+        <td>Task Question</td>
+        <td>
+            <input
+  
+                formControlName="Question"
+                type='text' name='Question'
+                class='form-control' value={{taskData?.Question}} required />
+        </td>
+    </tr>
+  
+  </table>
+  
+  
+            <!-- Submit buttons is [disabled] if form is invalid. [disabled]="update_risk_form.invalid" -->
+            <button class="btn btn-danger btn-lg btn-block" type="submit" >
+                <span class="fa fa-edit" style="color:white"></span> Update
+            </button>
+  
+  
+  
+  </form>
+  
+  </div>
+  </div>

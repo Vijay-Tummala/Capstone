@@ -1,0 +1,145 @@
+import { Component, OnInit, Input, Output, OnChanges, EventEmitter } from '@angular/core';
+import {MapserviceService} from '../mapservice.service';
+import { RiskService } from '../risk.service';
+import { TripRiskService } from '../triprisk.service';
+import { TaskserviceService } from '../taskservice.service';
+import { Observable } from 'rxjs/Observable';
+import { Risk } from '../risk';
+import { Trip } from '../trip';
+import { Task } from '../task';
+import {MapComponent} from '../map/map.component';
+import {ActivatedRoute} from '@angular/router';
+import { isUndefined } from 'util';
+
+@Component({
+  selector: 'app-view-trip-data',
+  templateUrl: './view-trip-data.component.html',
+  styleUrls: ['./view-trip-data.component.css'],
+  providers: [MapserviceService, RiskService, TripRiskService, TaskserviceService]
+})
+export class ViewTripDataComponent implements OnChanges {
+
+  @Input() TripID;
+  @Input() trip;
+
+  tripID;
+  mapObject:MapComponent;
+  tripData=[];
+  stopData=[];
+  riskData=[];
+  tripRiskData=[];
+  taskData=[];
+  viewStopID="nil";
+  oneTaskData=[];
+  oneRiskData=[];
+  oneStopData=[];
+  stripedDate;
+  currentTask: number = 0;
+  currentRisk: number = 0;
+  currentTripRisk: number = 0;
+  items: Array<any>;
+
+  constructor(
+    private mapServicing: MapserviceService, 
+    private riskService: RiskService, 
+    private tripriskService: TripRiskService, 
+    private taskService : TaskserviceService,
+    private activeRoute:ActivatedRoute, 
+    private map:MapComponent
+  ) {
+      this.mapObject=map;
+      this.tripID=this.mapObject.viewTripID;
+      console.log("testing trip id value in view data: " + this.tripID);
+      console.log("testing trip id value in view data: " + this.mapObject.viewTripID);
+   }
+
+   stripDate(date){
+      this.stripedDate=date.substring(0, 10);
+      console.log("strioed date: " + this.stripedDate);
+   }
+
+   viewStopData(stopID) {
+    console.log("inside view stop data");
+    console.log("inside view stop data: " + stopID);
+
+    this.viewStopID=stopID;
+    this.mapServicing.getStopByStopID(this.viewStopID)
+     .subscribe(stop => {
+        this.oneStopData=stop[0];
+      console.log(this.oneStopData);
+      });
+
+   }
+
+   viewTripRiskData(tripID, stopID) {
+     this.currentTripRisk=0;
+    console.log("inside view trip risk data");
+    console.log("inside view trip risk data: " + stopID);
+    console.log("inside view trip risk data: " + tripID);
+
+    this.tripriskService.readTripRisks(tripID,stopID)
+    .subscribe(triprisk => {
+      this.tripRiskData=triprisk;
+      console.log(this.tripRiskData);
+    });
+
+   }
+
+   readStopRisks(stopID){ 
+     this.currentRisk=0;
+     console.log("inside read stop risks");
+     console.log("inside read stop risks: " + stopID);
+    this.viewStopID=stopID;
+        //fetching risk info
+        this.riskService.readRisks(this.mapObject.viewTripID,this.viewStopID)
+        .subscribe(risk => {
+            this.riskData=risk;
+            console.log(risk);
+            console.log(this.riskData);
+        });
+   }
+
+   readStopTasks(stopID){ 
+     this.currentTask=0;
+    console.log("inside read stop tasks");
+    console.log("inside read stop tasks: " + stopID);
+      this.viewStopID=stopID;
+        //fetching task info
+        this.taskService.readTasks(this.viewStopID)
+        .subscribe(task => {
+              this.taskData=task;
+              console.log(task);
+              console.log(this.taskData);
+        });
+   }
+
+   ngOnChanges(){
+
+    //pass trip id 
+    this.mapServicing.getTripById(this.mapObject.viewTripID)
+    .subscribe(trip => {
+      this.tripData=trip[0];
+      console.log(trip);
+      console.log(this.tripData);
+      //fetching stop info
+      this.mapServicing.getStops(this.mapObject.viewTripID)
+      .subscribe(
+      stop => {
+        this.stopData=stop;
+        if (Array.isArray(stop) && stop.length) {
+          this.viewStopID=stop[0].StopID;
+        }
+        console.log(stop);
+        console.log(this.stopData);
+        //this.stopData=stop[0].StopID;
+      });
+
+      //fetching trip risk info
+      this.tripriskService.readTripRisks(this.mapObject.viewTripID,this.viewStopID)
+      .subscribe(triprisk => {
+        this.tripRiskData=triprisk
+        console.log(triprisk)
+      });
+    });
+}
+}

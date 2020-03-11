@@ -1,0 +1,294 @@
+<div class="row m-b-18px">
+  <div class="col-md-12">
+      <a style="color:white" (click)="readTripRisks()" class='btn btn-danger pull-right bright-btn'>
+          <span class='fa fa-list bright-btn'></span> Back to Trip Risks Assessment
+      </a>
+  </div>
+</div>
+
+<!-- HTML form for creating a triprisk -->
+<div class="row">
+<div class="col-md-12">
+
+<!--
+  1. Bind our HTML form to Angular using [formGroup]
+  2. If form was submitted, call createTripRisk() method of CreateTripRiskComponent
+-->
+<form [formGroup]="create_triprisk_form" (ngSubmit)="createTripRisk()">
+<table class="table table-hover text-right">
+  <tr>
+      <td>Risk Name</td>
+      <td>
+          <!-- Bind this input field to our 'angular form field' using formControlName -->
+          <input
+              formControlName="riskName"
+              name="riskName" type="text"
+              class="form-control" required />
+
+          <!-- show this error if the field is 'empty' and 'touched' -->
+          <div
+              *ngIf="create_triprisk_form.get('riskName').touched && create_triprisk_form.get('riskName').hasError('required')"
+              class="alert alert-danger">
+              Risk Name is required.
+          </div>
+      </td>
+  </tr>
+
+  <tr>
+    <td>Risk Description</td>
+    <td>
+        <!-- Bind this input field to our 'angular form field' using formControlName -->
+        <input
+            formControlName="desc"
+            name="desc" type="text"
+            class="form-control" required />
+
+        <!-- show this error if the field is 'empty' and 'touched' -->
+        <div
+            *ngIf="create_triprisk_form.get('desc').touched && create_triprisk_form.get('desc').hasError('required')"
+            class="alert alert-danger">
+            Risk Description is required.
+        </div>
+    </td>
+</tr>
+
+  <tr>
+      <td>Outcrop</td>
+      <td>
+          <input
+              formControlName="outcrop"
+              type="text" name="outcrop"
+              class="form-control" required />
+
+          <!-- show this error if the field is 'empty' and 'touched' -->
+          <div
+              *ngIf="create_triprisk_form.get('outcrop').touched && create_triprisk_form.get('outcrop').hasError('required')"
+              class="alert alert-danger">
+          Outcrop is required.
+          </div>
+      </td>
+  </tr>
+
+  <tr>
+      <td>Class</td>
+      <td>
+          <input
+              formControlName="class"
+              type="text" name="class" class="form-control" required />
+
+              <!-- show this error if the field is 'empty' and 'touched' -->
+              <div
+                  *ngIf="create_triprisk_form.get('class').touched && create_triprisk_form.get('class').hasError('required')"
+                  class="alert alert-danger">
+                  Class is required.
+              </div>
+      </td>
+  </tr>
+
+  <tr>
+    <td>Probability</td>
+    <td>
+        <input
+            formControlName="prob"
+            type="text" name="prob" class="form-control" required />
+
+            <!-- show this error if the field is 'empty' and 'touched' -->
+            <div
+                *ngIf="create_triprisk_form.get('prob').touched && create_triprisk_form.get('prob').hasError('required')"
+                class="alert alert-danger">
+                Probability is required.
+            </div>
+    </td>
+</tr>
+
+<tr>
+  <td>Rating</td>
+  <td>
+      <input
+          formControlName="rating"
+          type="text" name="rating" class="form-control" required />
+
+          <!-- show this error if the field is 'empty' and 'touched' -->
+          <div
+              *ngIf="create_triprisk_form.get('rating').touched && create_triprisk_form.get('rating').hasError('required')"
+              class="alert alert-danger">
+              Rating is required.
+          </div>
+  </td>
+</tr>
+
+<tr>
+  <td>Mitigation</td>
+  <td>
+      <input
+          formControlName="mitigation"
+          type="text" name="mitigation" class="form-control" required />
+
+          <!-- show this error if the field is 'empty' and 'touched' -->
+          <div
+              *ngIf="create_triprisk_form.get('mitigation').touched && create_triprisk_form.get('mitigation').hasError('required')"
+              class="alert alert-danger">
+              Mitigation is required.
+          </div>
+  </td>
+</tr>
+
+<tr>
+    <td>PPE</td>
+    <td>
+        <input
+            formControlName="ppe"
+            type="text" name="ppe" class="form-control" required />
+  
+            <!-- show this error if the field is 'empty' and 'touched' -->
+            <div
+                *ngIf="create_triprisk_form.get('ppe').touched && create_triprisk_form.get('ppe').hasError('required')"
+                class="alert alert-danger">
+                PPE is required.
+            </div>
+    </td>
+  </tr>
+
+  <tr>
+    <td>Required Equipments</td>
+    <td>
+        <input
+            formControlName="reqEq"
+            type="text" name="reqEq" class="form-control" required />
+  
+            <!-- show this error if the field is 'empty' and 'touched' -->
+            <div
+                *ngIf="create_triprisk_form.get('reqEq').touched && create_triprisk_form.get('reqEq').hasError('required')"
+                class="alert alert-danger">
+                Required Equipments field is required.
+            </div>
+    </td>
+  </tr>
+
+  <tr>
+    <td>Specific Warnings</td>
+    <td>
+        <input
+            formControlName="spWarn"
+            type="text" name="spWarn" class="form-control" required />
+  
+            <!-- show this error if the field is 'empty' and 'touched' -->
+            <div
+                *ngIf="create_triprisk_form.get('spWarn').touched && create_triprisk_form.get('spWarn').hasError('required')"
+                class="alert alert-danger">
+                Specific Warnings field is required.
+            </div>
+    </td>
+  </tr>
+
+<tr>
+  <td>Responsible</td>
+  <td>
+      <input
+          formControlName="resp"
+          type="text" name="resp" class="form-control" required />
+
+          <!-- show this error if the field is 'empty' and 'touched' -->
+          <div
+              *ngIf="create_triprisk_form.get('resp').touched && create_triprisk_form.get('resp').hasError('required')"
+              class="alert alert-danger">
+              Responsible is required.
+          </div>
+  </td>
+</tr>
+
+<tr>
+    <td>Risk Effect</td>
+    <td>
+        <input
+            formControlName="effect"
+            type="text" name="effect" class="form-control" required />
+  
+            <!-- show this error if the field is 'empty' and 'touched' -->
+            <div
+                *ngIf="create_triprisk_form.get('effect').touched && create_triprisk_form.get('effect').hasError('required')"
+                class="alert alert-danger">
+                Risk Effect field is required.
+            </div>
+    </td>
+  </tr>
+
+  <tr>
+    <td>Worst Outcome</td>
+    <td>
+        <input
+            formControlName="wOut"
+            type="text" name="wOut" class="form-control" required />
+  
+            <!-- show this error if the field is 'empty' and 'touched' -->
+            <div
+                *ngIf="create_triprisk_form.get('wOut').touched && create_triprisk_form.get('wOut').hasError('required')"
+                class="alert alert-danger">
+                Worst Outcome field is required.
+            </div>
+    </td>
+  </tr>
+
+  <tr>
+    <td>Residual Risk</td>
+    <td>
+        <input
+            formControlName="resRisk"
+            type="text" name="resRisk" class="form-control" required />
+  
+            <!-- show this error if the field is 'empty' and 'touched' -->
+            <div
+                *ngIf="create_triprisk_form.get('resRisk').touched && create_triprisk_form.get('resRisk').hasError('required')"
+                class="alert alert-danger">
+                Residual Risk field is required.
+            </div>
+    </td>
+  </tr>
+
+<!--<tr>
+  <td>TripID</td>
+  <td>
+      <input
+          formControlName="trip"
+          type="text" name="trip" class="form-control" required />
+
+          <!-- show this error if the field is 'empty' and 'touched' -->
+          <!--<div
+              *ngIf="create_triprisk_form.get('trip').touched && create_triprisk_form.get('trip').hasError('required')"
+              class="alert alert-danger">
+              TripID is required.
+          </div>
+  </td>
+</tr>-->
+
+<!--<tr>
+  <td>StopID</td>
+  <td>
+      <input
+          formControlName="stop"
+          type="text" name="stop" class="form-control" required />
+
+          <!-- show this error if the field is 'empty' and 'touched' -->
+          <!--<div
+              *ngIf="create_triprisk_form.get('stop').touched && create_triprisk_form.get('stop').hasError('required')"
+              class="alert alert-danger">
+              StopID is required.
+          </div>
+  </td>
+</tr>-->
+</table>
+
+  <!--<tr>
+      <td></td>
+      <td>-->
+          <!-- disable the submit button if the form is 'invalid' -->
+          <button class="btn btn-danger btn-lg btn-block" type="submit" [disabled]="create_triprisk_form.invalid">
+              <span class="fa fa-plus" style="color:white"></span> Add Risk
+          </button>
+      <!--</td>
+  </tr>-->
+
+</form>
+
+</div>
+</div>

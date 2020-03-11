@@ -1,0 +1,96 @@
+<div class="row m-b-18px">
+  <div class="col-md-12">
+      <a style="color:white" (click)="readTripRisks()" class='btn btn-danger pull-right'>
+          <span class='fa fa-list bright-btn'></span> Back to Trip Risks Assessment
+      </a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+      <!-- HTML table for displaying a triprisk details -->
+      <table class='table table-hover'>
+
+          <tr>
+              <td class="w-40-pct">Risk Name</td>
+              <td>{{riskData?.RiskName}}</td>
+          </tr>
+
+          <tr>
+            <td>Risk Description</td>
+            <td>{{riskData?.Description}}</td>
+        </tr>
+
+          <tr>
+              <td>Outcrop</td>
+              <td>{{riskData?.Outcrop}}</td>
+          </tr>
+
+          <tr>
+              <td>Class</td>
+              <td>{{riskData?.Class}}</td>
+          </tr>
+
+          <tr>
+              <td>Probability</td>
+              <td>{{riskData?.Probability}}</td>
+          </tr>
+
+          <tr>
+            <td>Rating</td>
+            <td>{{riskData?.Rating}}</td>
+          </tr>
+
+          <tr>
+            <td>Mitigation</td>
+            <td>{{riskData?.Mitigation}}</td>
+          </tr>
+
+          <tr>
+            <td>PPE</td>
+            <td>{{riskData?.Ppe}}</td>
+         </tr>
+
+         <tr>
+            <td>Required Equipment</td>
+            <td>{{riskData?.ReqEquipment}}</td>
+         </tr>
+
+         <tr>
+            <td>Specific Warnings</td>
+            <td>{{riskData?.SpWarning}}</td>
+         </tr>
+
+          <tr>
+            <td>Responsible</td>
+            <td>{{riskData?.Responsible}}</td>
+          </tr>
+
+          <tr>
+            <td>Risk Effect</td>
+            <td>{{riskData?.Effect}}</td>
+          </tr>
+
+          <tr>
+            <td>Worst Outcome</td>
+            <td>{{riskData?.WorstOutcome}}</td>
+          </tr>
+
+          <tr>
+            <td>Residual Risk</td>
+            <td>{{riskData?.ResidualRisk}}</td>
+         </tr>
+
+          <!--<tr>
+            <td>TripID</td>
+            <td>{{riskData?.TripID}}</td>
+          </tr>
+
+          <tr>
+            <td>StopID</td>
+            <td>{{riskData?.StopID}}</td>
+          </tr>-->
+
+      </table>
+  </div>
+</div>

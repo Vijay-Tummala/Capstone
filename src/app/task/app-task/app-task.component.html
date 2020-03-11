@@ -1,0 +1,101 @@
+<div class="modal fade" style="overflow-y: scroll;" id="TaskModal1" tabindex="-1" role="dialog" aria-labelledby="RiskModalTitle" aria-hidden="true" data-backdrop="false">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="StopTaskTitle">{{title}}</h5>
+                  </div>
+                   <!--<div class='page-header'><h1>{{title}}</h1></div>
+             </div>
+          </div>-->
+          <div class="modal-body">
+          <!-- Show this view if "show_read_tasks_html" property of AppComponent is true. -->
+          <app-read-task
+          *ngIf="show_read_tasks_html"
+          [task_id]="risk_id"
+          [riskTripID]="riskTripID"
+          [riskStopID]="riskStopID"
+          [startTripFlow]="startTripFlow"
+          (show_create_task_event)="showCreateTask($event)"
+          (show_read_one_task_event)="showReadOneTask($event)"
+          (show_update_task_event)="showUpdateTask($event)"
+          (show_delete_task_event)="showDeleteTask($event)">
+          </app-read-task>
+        
+        
+          <!--
+            * Show this view if "show_create_task_html" is true.
+         
+            * If (show_read_tasks_event) was emitted in CreatetaskComponent,
+              trigger showReadtasks() method in AppComponent.
+          -->
+          <app-task-create
+          *ngIf="show_create_task_html"
+          (show_read_tasks_event)="showReadTasks($event)"></app-task-create>
+        
+          <!--
+            * Show this view if "show_read_one_task_html" is true.
+         
+            * If (show_read_tasks_event) was emmited in ReadOnetaskComponent,
+              trigger showReadtasks() method in AppComponent.
+         
+            * Pass "task_id" property value of AppComponent
+              to [task_id] property of ReadOnetaskComponent.
+        -->
+          <app-read-one-task
+          *ngIf="show_read_one_task_html"
+          (show_read_tasks_event)="showReadTasks($event)"
+          [task_id]="task_id">
+          </app-read-one-task>
+        
+          <!--
+            * Show this view if "show_update_task_html" is true.
+         
+            * Pass "task_id" property value of AppComponent
+              to [task_id] property of UpdatetaskComponent.
+         
+            * If (show_read_tasks_event) was emitted in UpdatetaskComponent,
+              trigger showReadtasks() method in AppComponent.
+        -->
+
+        
+
+            <app-update-task
+            *ngIf="show_update_task_html"
+            [task_id]="task_id"
+            (show_read_tasks_event)="showReadTasks($event)">
+            </app-update-task>
+        
+        <!--
+            * Show this view if "show_delete_task_html" is true.
+         
+            * Pass "task_id" property value of AppComponent
+              to [task_id] property of UpdatetaskComponent.
+         
+            * If (show_read_tasks_event) was emitted in DeletetaskComponent,
+              trigger showReadtasks() method in AppComponent.
+        -->
+      
+            <app-delete-task
+                *ngIf="show_delete_task_html"
+                [task_id]="task_id"
+                (show_read_tasks_event)="showReadTasks($event)">
+            </app-delete-task>
+        </div>
+       
+      
+        <div class="modal-footer">
+            <div *ngIf="mapObject.isStopTaskEdit;then edit else create"></div>
+            <ng-template #edit>
+                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#EditStopDataModal" data-dismiss="modal" >Back To Stop Summary</button>
+            </ng-template>
+            <ng-template #create>
+                    <button type="button" data-toggle="modal" data-target="#StopSummaryModal" class="btn btn-secondary" data-dismiss="modal">Back to Stops</button>
+            </ng-template>
+        <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+        <!--<button type="button" data-toggle="modal" data-target="#StopSummaryModal" class="btn btn-primary" data-dismiss="modal">Back to Stops</button>-->          
+        </div>
+        </div>
+        </div>
+        </div>
+        <!-- /container -->
+        

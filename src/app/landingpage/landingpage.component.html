@@ -1,0 +1,226 @@
+  <!-- *******************************************************************************************
+       * TODO(DEVELOPER): Paste the initialization snippet from:
+       * Firebase Console > Overview > Add Firebase to your web app. *
+	   ***************************************************************************************** -->
+	   <script src="https://www.gstatic.com/firebasejs/4.10.0/firebase.js"></script>
+	   <script type="text/javascript">
+		 initApp = function() {
+   
+		   firebase.auth().onAuthStateChanged(function(user) {
+			 if (user) {
+			   // User is signed in.
+			   var displayName = user.displayName;
+			   var email = user.email;
+			   var emailVerified = user.emailVerified;
+			   var photoURL = user.photoURL;
+			   var uid = user.uid;
+			   var phoneNumber = user.phoneNumber;
+			   var providerData = user.providerData;
+
+			   user.getIdToken().then(function(accessToken) {
+				 document.getElementById('main-signedout').style.display = "none";
+			   });
+			 } else {
+			   // User is signed out.
+				document.getElementById('main-signedin').style.display = "none";
+			 }
+		   }, function(error) {
+			 console.log(error);
+		   });
+		 };
+   
+		 window.addEventListener('load', function() {
+		   initApp()
+		 });
+     </script> 
+     
+
+  <div id="main-signedout" class="main-wrapper-first">
+			<header>
+				<div class="container">
+					<div class="header-wrap">
+						<div class="header-top d-flex justify-content-between align-items-center">
+							<div class="logo">
+								<a href="/landing"><img src="assets/images/logo.png" alt=""></a>
+							</div>
+							<div id="menubar_signedout" class="main-menubar d-flex align-items-center">
+								    <nav class="hide" *ngIf="!isLoggedIn">
+									    <a href="/landing">Home</a>
+                                        <a href="/login">Sign in</a>
+                                    </nav>
+                                    <nav class="hide" *ngIf="isLoggedIn">
+                                        <a href="/landing">Welcome User!</a>
+                                        <a id="signout_link" href="/landing" (click)="logout()" routerlink="landing">Sign Out</a>
+                                    </nav>
+								<div class="menu-bar"><span class="lnr lnr-menu"></span></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</header>
+		</div>
+		
+		<div class="main-wrapper">
+			<div class="active-banner">
+				<div class="item d-flex align-items-center">
+					<div class="container">
+						<div class="content">
+							<h1 class="text-white text-uppercase">Welcome to PlanItWell!<br> </h1>
+							<p class="text-white">A one stop app for geological field trip management</p>
+                            <a class="primary-btn d-inline-flex align-items-center" *ngIf="isLoggedIn" (click)="maps()"><span class="mr-10">Get Started</span><span class="lnr lnr-arrow-right"></span></a>
+                            <a href="/login" class="primary-btn d-inline-flex align-items-center" *ngIf="!isLoggedIn"><span class="mr-10">Get Started</span><span class="lnr lnr-arrow-right"></span></a>
+						</div>
+					</div>
+				</div>
+				<div class="img-controls">
+					<div class="img-dots">
+						<div class="img-dot"></div>
+						<div class="img-dot"></div>
+						<div class="img-dot"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="main-wrapper">
+			<!-- Start Feature Area -->
+			<section class="featured-area">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="single-feature">
+								<div class="icon">
+									<span class="lnr lnr-sun"></span>
+								</div>
+								<div class="desc text-center">
+									<h6 class="title text-uppercase">Plan a trip</h6>
+									<p>Field trips take a lot of organizing. With PlanItWell you can easily create a field trip on the website or app. If you are a geology lecturer you can set up geological field trips for students complete with stop location information, geological data such as age and rock type and also have the ability to assign tasks for each student to complete. These stops can be updated dynamically in the field and then the data collected at each stop uploaded back at base so a record of each trip and its data can be saved for future use. If you are not in the education sector then this app will help you plan out any trip you want and help keep track of everything in one place on the app. Since we know that field trips almost always end up in dead zones for cell service this app features offline functionality as well.</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="single-feature">
+								<div class="icon">
+									<span class="lnr lnr-code"></span>
+								</div>
+								<div class="desc text-center">
+									<h6 class="title text-uppercase">Build a Risk Assessment</h6>
+									<p>An essential part of geological fieldwork is the generation of a comprehensive risk assessment. The generation of such assessments is often time consuming and involves replicating work done in other parts of the organization. These assessments are created in advance of fieldwork and as such may not include risks which can rapidly develop or change, such as coastal sea states or extreme weather phenomena. PlanItWell helps to standardize the process of creating risk assessment reports and also reduces the effort required to generate them. This is achieved through the app via  crowd sourcing of risk assessments that can be recycled by other users visiting the same sites and by drawing on on-line resources to automatically populate risks and other key information such as location of nearest hospital and update them in real-time in the field. </p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="single-feature">
+								<div class="icon">
+									<span class="lnr lnr-clock"></span>
+								</div>
+								<div class="desc text-center">
+									<h6 class="title text-uppercase">Go on a Trip</h6>
+									<p>A geological field trip has lots of kit – field guide, field note book, GPS maybe, pens, pencils, camera, grain size charts, compass-clinometer etc. With the PlanItWell app you can essentially have all that kit at your fingertips on the app. You will be able to view your trip stops and also any activities or key data that you need to collect, make necessary notes and observations, take photos, record strike and dip measurements, get notifications from others on your trip, get live feeds on weather and other hazard alerts and view the dynamic risk assessment for each stop so you are always practicing safety in the field. All the data you record can be uploaded back at base and edited to complete the field trip activity. The only thing we can’t do is provide you with a geological hammer and a sample bag!</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- End Feature Area -->
+			<!-- Start Story Area -->
+			<section class="story-area">
+				<div class="container">
+					<div class="row align-items-center">
+						<div class="col-lg-3">
+							<div class="story-title">
+								<h3 class="text-white">PlanItWell Story</h3>
+								<span class="text-uppercase text-white">Re-imagining Field Trips</span>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="story-box">
+								<h6 class="text-uppercase">About PlanItWell</h6>
+								<p>If you are a geologist, a student in Earth Sciences, a lecturer of Earth Sciences or a keen amateur geologist then PlanItWell can provide you with all the tools you need to get a geology field trip planned, a risk assessment swiftly compiled, take a field trip with a digital field guide, log important geological data with recording tools and provide the ability to upload your data at the end of the trip.</p>
+                                <a class="primary-btn d-inline-flex align-items-center" *ngIf="isLoggedIn" (click)="maps()"><span class="mr-10">Get Started</span><span class="lnr lnr-arrow-right"></span></a>
+                                <a href="/login" class="primary-btn d-inline-flex align-items-center" *ngIf="!isLoggedIn"><span class="mr-10">Get Started</span><span class="lnr lnr-arrow-right"></span></a>
+                                <!--<a href="/landing" class="primary-btn d-inline-flex align-items-center"><span class="mr-10">Get Started</span><span class="lnr lnr-arrow-right"></span></a>-->
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- End Story Area -->
+
+			<div class="brand-area">
+				<div class="container">
+					<div class="total-brand d-flex justify-content-around">
+					</div>
+				</div>
+			</div>
+			<!-- Start Footer Widget Area -->
+			<section class="footer-widget-area">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="single-widget d-flex flex-wrap justify-content-between">
+								<div class="icon d-flex align-items-center justify-content-center">
+									<span class="lnr lnr-pushpin"></span>
+								</div>
+								<div class="desc">
+									<h6 class="title text-uppercase">Address</h6>
+									<p>Adress <br>goes <br>here</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="single-widget d-flex flex-wrap justify-content-between">
+								<div class="icon d-flex align-items-center justify-content-center">
+									<span class="lnr lnr-earth"></span>
+								</div>
+								<div class="desc">
+									<h6 class="title text-uppercase">Email Address</h6>
+									<div class="contact">
+										<a href="mailto:info@dataarc.com">info@planitwell.com</a> <br>
+										<a href="mailto:support@dataarc.com">support@planitwell.com</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="single-widget d-flex flex-wrap justify-content-between">
+								<div class="icon d-flex align-items-center justify-content-center">
+									<span class="lnr lnr-phone"></span>
+								</div>
+								<div class="desc">
+									<h6 class="title text-uppercase">Phone Number</h6>
+									<div class="contact">
+										<a href="tel:1545">+1 (999) 999-9999</a> <br>
+										<a href="tel:54512">+1 (999) 999-9999</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<footer>
+					<div class="container">
+						<div class="footer-content d-flex justify-content-between align-items-center flex-wrap">
+							<div class="logo">
+								<a href="/landing"><img src="assets/images/f-logo.png" alt=""></a>
+							</div>
+							<div class="copy-right-text">Copyright &copy; 2018  |  PLANitWELL. </div>
+							<div class="footer-social">
+								<a href="/landing"><i class="fa fa-facebook"></i></a>
+								<a href="/landing"><i class="fa fa-twitter"></i></a>
+								<a href="/landing"><i class="fa fa-dribbble"></i></a>
+								<a href="/landing"><i class="fa fa-behance"></i></a>
+							</div>
+						</div>
+					</div>
+				</footer>
+			</section>
+			<!-- End Footer Widget Area -->
+
+    </div>
+    
+    <script src="assets/js/mainland.js"></script>
+<script src="assets/js/signout.js"></script>    
+<!-- Below is the initialization snippet for Firebase project. -->
+		<script src="https://www.gstatic.com/firebasejs/4.10.0/firebase.js"></script>

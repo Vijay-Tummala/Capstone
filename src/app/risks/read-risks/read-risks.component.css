@@ -1,0 +1,16 @@
+.modal-open {
+    overflow: inherit;
+  }
+
+
+  .btn-primary {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+  }
+  
+  .btn-primary:hover {
+    background-color: #7a120b;; /* Green */
+    color: white;
+  }
+  

@@ -1,0 +1,99 @@
+    <div class="modal fade" style="overflow-y: scroll;" id="TripRiskModal1" tabindex="-1" role="dialog" aria-labelledby="TripRiskModalTitle" aria-hidden="true" data-backdrop="false">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="StopTripRiskTitle">{{title}}</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                   <!--<div class='page-header'><h1>{{title}}</h1></div>
+             </div>
+          </div>-->
+          <div class="modal-body">
+          <!-- Show this view if "show_read_triprisks_html" property of AppComponent is true. -->
+          <app-read-triprisks
+          *ngIf="show_read_triprisks_html"
+          [risk_id]="risk_id"
+          [riskTripID]="riskTripID"
+          [riskStopID]="riskStopID"
+          (show_read_triprisks_event)="showReadTripRisks($event)"
+          (show_create_triprisk_event)="showCreateTripRisk($event)"
+          (show_read_one_triprisk_event)="showReadOneTripRisk($event)"
+          (show_update_triprisk_event)="showUpdateTripRisk($event)"
+          (show_delete_triprisk_event)="showDeleteTripRisk($event)">
+          </app-read-triprisks>
+        
+        
+          <!--
+            * Show this view if "show_create_triprisk_html" is true.
+         
+            * If (show_read_triprisks_event) was emitted in CreatetripriskComponent,
+              trigger showReadtriprisks() method in AppComponent.
+          -->
+          <app-create-triprisk
+          *ngIf="show_create_triprisk_html"
+          (show_read_triprisks_event)="showReadTripRisks($event)"></app-create-triprisk>
+        
+          <!--
+            * Show this view if "show_read_one_triprisk_html" is true.
+         
+            * If (show_read_triprisks_event) was emmited in ReadOneTripRiskComponent,
+              trigger showReadTripRisks() method in AppTripRiskComponent.
+         
+            * Pass "risk_id" property value of AppTripRiskComponent
+              to [risk_id] property of ReadOneTripRiskComponent.
+        -->
+          <app-read-one-triprisk
+          *ngIf="show_read_one_triprisk_html"
+          (show_read_triprisks_event)="showReadTripRisks($event)"
+          [risk_id]="risk_id">
+          </app-read-one-triprisk>
+        
+          <!--
+            * Show this view if "show_update_triprisk_html" is true.
+         
+            * Pass "risk_id" property value of AppComponent
+              to [risk_id] property of UpdateTripRiskComponent.
+         
+            * If (show_read_triprisks_event) was emitted in UpdateTripRiskComponent,
+              trigger showReadTripRisks() method in AppComponent.
+        -->
+            <app-update-triprisk
+            *ngIf="show_update_triprisk_html"
+            [risk_id]="risk_id"
+            (show_read_triprisks_event)="showReadTripRisks($event)">
+            </app-update-triprisk>
+        
+        <!--
+            * Show this view if "show_delete_triprisk_html" is true.
+         
+            * Pass "risk_id" property value of AppComponent
+              to [risk_id] property of UpdateTripRiskComponent.
+         
+            * If (show_read_triprisks_event) was emitted in DeleteTripRiskComponent,
+              trigger showReadTripRisks() method in AppComponent.
+        -->
+            <app-delete-triprisk
+                *ngIf="show_delete_triprisk_html"
+                [risk_id]="risk_id"
+                (show_read_triprisks_event)="showReadTripRisks($event)">
+            </app-delete-triprisk>
+        </div>
+        <div class="modal-footer">
+                <div *ngIf="mapObject.isTripRiskEdit;then edit else create"></div>
+                <ng-template #edit>
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#EditTripDataModal" data-dismiss="modal" >Back To Trip Summary</button>
+                </ng-template>
+                <ng-template #create>
+                        <button type="button" class="btn btn-secondary mr-auto" data-target="#StopSummaryModal" data-dismiss="modal">Previous</button>
+                        <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+                        <!--<button type="button" data-toggle="modal" data-target="#StopSummaryModal" class="btn btn-primary" data-dismiss="modal">Back to Stops</button>-->
+                        <button type="button" class="btn btn-primary float-right" data-toggle="modal" [disabled]="stops.length<2" data-target="#emergencyContact" data-dismiss="modal">Next
+                        </button>
+                </ng-template>
+        </div>
+        </div>
+        </div>
+        </div>
+        

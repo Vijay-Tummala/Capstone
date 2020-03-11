@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+<body>
+<div>
+    <!--Menu and Search box-->
+    <div class= "pac-card" id="pac-card">
+                    <div class="top-pad">
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                            <div class="container-fluid">
+                                <div class="navbar-header">
+                                    <button id="sidebarCollapse1" class="btn btn-outline-secondary rounded-0" type="button" (click)="activeButton()">
+                                        <span class="oi oi-grid-three-up"></span>
+                                    </button>
+                                    <a href="/landing"><img src="assets/images/logo-small.png" alt="planitwell logo"></a>
+                                </div>
+                            </div>
+                    </nav>                     
+                    <div class="scrolling" style="overflow-y:auto;">
+                    <nav id="sidebar" [ngClass]="{'active':isActive}">
+                            <div class="sidebar-header">
+                                <span class="fa fa-search decor-tail"></span><input type="text" class="controls" id="searchBox" placeholder=" Search Places">
+                            </div>
+                            <ul class="list-unstyled components">                                  
+                                <li><a data-toggle="modal"  href="#CreateTripModal"><span class="fa fa-plus"></span> Create Trip</a></li>
+                                <li>
+                                        <a href="#upTripsCollapse" data-toggle="collapse" aria-expanded="false"><span class="fa fa-calendar"></span> Upcoming Trips</a>
+                                        <ul class="collapse list-unstyled" id="upTripsCollapse">
+                                            <li *ngFor="let each of trip; index as u">
+                                                <a href="#uTripSubSubMenu{{u}}" data-toggle="collapse" aria-expanded="false" (click)="loadtripdetails(each.TripID)"> {{each.TripName}} </a>
+                                                <ul class="collapse list-unstyled" id="uTripSubSubMenu{{u}}">
+                                                    <li><a data-dismiss="modal" data-target="#StopSummaryModal" data-toggle="modal" (click)="getStopsByTrip(each.TripID)">&nbsp;&nbsp;&nbsp;&nbsp;Go on a Trip</a></li>
+                                                    <li><a data-toggle="modal" href="#EditTripDataModal" (click)="editTripData(each)">&nbsp;&nbsp;&nbsp;&nbsp;Edit Trip Details</a></li>
+                                                    <li><a data-toggle="modal" href="#ViewTripDataModal" (click)="viewTripData(each)">&nbsp;&nbsp;&nbsp;&nbsp;View Trip Summary</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                </li>
+                                <li>
+                                        <a href="#PastTripsCollapse" data-toggle="collapse" aria-expanded="false"><span class="fa fa-history"></span> Past Trips</a>
+                                        <ul class="collapse list-unstyled" id="PastTripsCollapse">
+                                            <li *ngFor="let each of trip; index as t">
+                                                <a href="#pTripSubSubMenu{{t}}" data-toggle="collapse" aria-expanded="false" (click)="loadtripdetails(each.TripID)"> {{each.TripName}} </a>
+                                                <ul class="collapse list-unstyled" id="pTripSubSubMenu{{t}}">
+                                                    <li><a data-toggle="modal" href="#ViewTripDataModal" (click)="viewTripData(each)">&nbsp;&nbsp;&nbsp;&nbsp;View Trip Summary</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>                                
+                                <li>
+                                    <a><span class="fa fa-cogs"></span> Settings </a>
+                                </li>
+                                <li>
+                                    <a *ngIf="!isLoggedIn" (click)="login()"><span class="fa fa-sign-in"></span> Sign In</a>
+                                    <a *ngIf="isLoggedIn" (click)="logout()"><span class="fa fa-sign-out"></span> Sign Out</a> 
+                                </li>                                
+                            </ul>   
+                            <ul class="list-unstyled CTAs">
+                                    <li><a href="" class="download">View Terms & Conditions</a></li>
+                                    <li><a href="" class="article">About Us</a></li>
+                                    <li><a href="" class="download">Help</a></li>
+                                    <li><a href="" class="article">Contact Us</a></li>
+                            </ul>                                                
+                    </nav>  
+                </div>
+                </div>                   
+    </div>
+
+
+    <!-- Create Trip Modal Window-->
+
+    <div class="modal fade" id="CreateTripModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="CreateTripTitle">Create Trip</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="Trip_Name">Trip Name</label>
+                            <input type="text" class="form-control" name="trip_name" [(ngModel)]="trip_name" id="trip_name" placeholder="">    
+                        </div>
+                       
+                        <div class="form-group">
+                            <label for="Trip_Description">Trip Description</label>
+                            <textarea class="form-control" id="trip_description" name="description" [(ngModel)]="description" rows="3"></textarea>
+                        </div>
+                            
+                        <div class="form-group">
+                            <div class = "row">
+                                <div class = "col m6">
+                                    <label for="Start_Date">Start Date</label>
+                                    <my-date-picker name="start_date" [options]="myDatePickerOptions"
+                                    [(ngModel)]="start_date" required></my-date-picker>
+                                </div>
+                                <div class = "col m6">
+                                    <label for="exampleInputEmail1">End Date</label>
+                                    <my-date-picker name="end_date" [options]="myDatePickerOptions"
+                                    [(ngModel)]="end_date" required></my-date-picker>
+                                </div>
+                            </div>     
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary mr-auto" data-dismiss="modal">Close</button>
+                    <button type="button" data-toggle="modal" data-target="#StopSummaryModal" class="btn btn-primary" data-dismiss="modal" (click)="createTrip()">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--Stop Summary  Starts-->
+
+<div class="modal" tabindex="-1" role="dialog" id="StopSummaryModal">
+
+        
+                <div class="modal-dialog" role="document" *ngIf="isStartTripFlow==true">
+                  <div class="modal-content" id="success_content">
+                    <div class="alert alert-success">
+                      <strong>Success!</strong>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <p>Staring the Trip successfully</p>
+                    </div>
+                  </div>
+                </div>
+        
+
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+                <form>
+                     <button class="btn btn-primary" data-toggle="modal" data-target="#IndividualStopModal" data-dismiss="modal" (click)="changeSetting()" [disabled]="isStartTripFlow==true" >
+                            <span class="simple-svg" data-icon="fa-plus-circle" data-inline="false"></span>
+                            </button>
+                          <h5 style="display:inline;padding-left: 10px;">Add Stops</h5>
+                    </form>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+
+        </div>
+        <div class="modal-body" id="summary-modal" >
+          
+                
+            <div *ngIf="stops.length>0;then stopList else noStops"></div>
+                <ng-template #stopList>
+                    <ul class="list-group">
+                        <li *ngFor="let stop of stops;index as i" class="list-group-item">
+                         {{i+1}} {{stop[0].StopName}}  <!--An array of Array-->
+                        <div class="float-right">
+                         <button class="btn btn-primary" data-toggle="modal" data-target="#IndividualStopModal" (click)="editStop(stop)" data-dismiss="modal" [disabled]="isStartTripFlow==true" >
+                        <span class="simple-svg" data-icon="fa-solid:edit" data-inline="false"></span>
+                        </button>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#IndividualStopModal" (click)="viewStop(stop)"  data-dismiss="modal">
+                        <span class="simple-svg" data-icon="mdi-view-list" data-inline="false"></span>
+                        </button>
+                        <button class="btn btn-primary" (click)="removeStop(stop)" [disabled]="isStartTripFlow==true">
+                        <span class="simple-svg" data-icon="mdi-delete" data-inline="false"></span>
+                        </button>
+                        <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#RiskModal1" class="btn btn-primary" data-dismiss="modal" (click)="readRisks(stop)">
+                        <span class="fa fa-exclamation-triangle" data-inline="false">Risks</span>
+                        </button>
+                        <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#TaskModal1" class="btn btn-primary" data-dismiss="modal" (click)="readRisks(stop)">
+                        <span class="fa fa-check-square-o" data-inline="false">Tasks</span>  
+                        </button>
+                        </div>
+                        </li>
+                    </ul>
+
+                </ng-template>
+                <ng-template #noStops>
+                
+                </ng-template>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary mr-auto" data-target="#CreateTripModal" data-dismiss="modal">Previous</button>
+          <button type="button" class="btn btn-primary float-right" [disabled]="stops.length<2" data-toggle="modal" data-target="#TripRiskModal1" data-dismiss="modal" (click)="readTripRisks()">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!--Stop Summary  Ends-->
+
+
+<!--Stop Modal 2 Starts-->
+<div class="modal fade" id="IndividualStopModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Create Stop</h5>
+                <button type="button" class="close" data-dismiss="modal" data-target="#stop" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #formData="ngForm" >
+                      <fieldset [disabled]="isReadonly">
+                    <div class="form-group">
+                        <label for="stopName">Stop Name</label>
+                        <input  type="text" class="form-control"  ngModel name="stopName" #stopName="ngModel"   id="stopName" [(ngModel)]="stop_name"  placeholder="Enter Stop Name">
+                    </div>
+                   
+                    <div class="form-group">
+                        <label for="stopDesc">Stop Description</label>
+                        <textarea  class="form-control" id="stopDesc"  ngModel name="stopDesc" #stopDesc="ngModel" rows="3" [(ngModel)]="stop_description"  placeholder="Enter Stop Description"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <div class = "col m6" style="z-index: 1051 !important;">
+                        <label for="stopLocation">Enter Location</label>
+                        <input  type="text" placeholder="Enter Location" ngModel name="stopLocation" #stopLocation="ngModel" [(ngModel)]="stop_location"  class="form-control" id="stop_location" (click)="autocomplete()">
+                    </div>
+                    </div>
+                    <p style="text-align:center">OR</p>
+                    <div class="form-group">
+                        <div class = "row">
+                            <div class = "col m3">
+                                <label for="lat">Latitude</label>
+                                <input  type="email" class="form-control" id="lat" ngModel name="lat" #lat="ngModel" [(ngModel)]="stop_latitude" placeholder="Latitude">
+                            </div>
+                            <div class = "col m3">
+                                <label for="lng">Longitude </label>
+                                <input  type="email" class="form-control" id="lng" ngModel name="lng" #lng="ngModel" [(ngModel)]="stop_longitude"  placeholder="Longitude">
+                            </div>
+                        </div>
+                    </div>
+                    <p style="text-align:center">OR</p>
+                    <div class="form-group">
+                        <div class = "col m12">
+                            <button type="button"  class="btn btn-primary btn-lg btn-block" data-dismiss="modal" (click)="searchMap()" >Search in Map</button>
+                        </div>           
+                    </div>
+                    <!-- Sayali-->
+                    <!--<button type="button" data-toggle="modal" data-target="#RiskModal1" class="btn btn-primary" data-dismiss="modal" (click)="readRisks()">Risks Assessment</button>-->
+                    <!--Sayali-->
+                    </fieldset>
+                </form>
+            </div>
+            <div class="modal-footer">
+                   <div *ngIf="isEditTrip;then tripLoad else createLoad"></div>
+            <ng-template #createLoad>
+                <button type="button" class="btn btn-secondary mr-auto" data-dismiss="modal" data-target="#StopSummaryModal" data-toggle="modal">Close</button>
+                <div *ngIf="isEdit;then update else save"></div>
+                <ng-template #save>
+                      <button type="button" class="btn btn-primary" [disabled]="isReadonly" data-toggle="modal" data-target="#StopSummaryModal" data-dismiss="modal" (click)="createStop()" >Save</button>
+                </ng-template>
+                <ng-template #update>
+                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#StopSummaryModal" data-dismiss="modal" (click)="updateStop(formData.value)">Update</button>
+                </ng-template>
+            </ng-template>
+            <ng-template #tripLoad>
+                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#EditStopDataModal" data-dismiss="modal" >Back To Stop Summary</button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#EditStopDataModal" data-dismiss="modal" (click)="createFromEditStop()" >Save</button>
+            </ng-template>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Stop Modal 2 Ends-->
+
+<!--Emergency Contact-->
+<emergency [TripFromMap]="tripId"></emergency>
+<!--Emergency Contact ends-->
+
+<!--Add Users-->
+<add-user [TripFromMap]="tripId"></add-user>
+<!--Add Users-->
+
+
+
+<!--             Adding Risks Component               -->
+    <app-app-risk 
+    [riskTripID]="riskTripID"
+    [riskStopID]="riskStopID"
+    [startTripFlow]="startTripFlow">
+    </app-app-risk>
+<!--             Ends Risks Component               -->
+
+<!--             Adding Tasks Component               -->
+    <app-app-task
+    [riskTripID]="riskTripID"
+    [riskStopID]="riskStopID"
+    [startTripFlow]="startTripFlow"> </app-app-task>
+<!--             Ends Tasks Component               -->
+
+<!--             Adding Tasks Component               -->
+<app-app-triprisk 
+[riskTripID]="riskTripID"
+[riskStopID]="riskStopID">
+</app-app-triprisk>
+<!--             Ends Tasks Component               -->
+
+<!--             Adding View Trip Data Component               -->
+<app-view-trip-data
+[TripID]="viewTripID"
+[trip]="tripData">
+</app-view-trip-data>
+<!--             Ending View Trip Data Component               -->
+
+<!--             Adding View Trip Data Component               -->
+<app-edit-trip-data
+[TripID]="viewTripID"
+[StopID]="viewStopID"
+[isEditTrip]="isEditTrip"
+[tripJson]="tripData"
+(show_read_stops_event)="showReadStops($event)">
+</app-edit-trip-data>
+<!--             Ending View Trip Data Component               -->
+
+    <!--<input id="pac-input" class="controls" type="text" placeholder="Search Box">-->
+    <div id="googleMap"></div>
+
+</div>
+
+
+
+</body>
+
+</html>

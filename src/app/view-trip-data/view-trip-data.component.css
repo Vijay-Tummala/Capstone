@@ -1,0 +1,14 @@
+.table {
+    height: 100% !important;
+}
+
+.modal-open {
+    overflow: inherit;
+  }
+
+  #divider{
+    background-color:#dc3545;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}  

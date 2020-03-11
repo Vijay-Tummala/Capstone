@@ -1,0 +1,693 @@
+<!--view trip data Modal Starts-->
+<div style="overflow-y: scroll;" class="modal fade" id="ViewTripDataModal" tabindex="-1" role="dialog" aria-labelledby="ViewTripDataModalTitle" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="ViewTripDataModalLongTitle">Trip Summary</h5>
+              <button type="button" class="close" data-dismiss="modal" data-target="#stop" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <div class="row m-b-18px">
+                  <div class="col-md-12">
+                      <a style="color:white" class='btn btn-danger pull-right'>
+                          <span class='fa fa-list bright-btn'></span> Export PDF
+                      </a>
+                  </div>
+                </div>            
+              <form>
+                  <div class="form-group">
+                      <label for="Trip_Name">Trip Name</label>
+                      <input [disabled]="true" type="text" class="form-control" name="trip_name" value={{tripData?.TripName}} id="trip_name" placeholder="">    
+                  </div>
+
+                  <div class="form-group">
+                      <div class = "row">
+                          <div class = "col m6">
+                              <label for="Start_Date">Start Date</label>
+                              <input [disabled]="true" type="text" class="form-control" id="start_date" name="start_date" value={{sDate}} placeholder="">
+                          </div>
+                          <div class = "col m6">
+                              <label for="exampleInputEmail1">End Date</label>
+                              <input [disabled]="true" type="text" class="form-control" id="end_date" name="end_date" value={{eDate}} placeholder="">
+                          </div>
+                      </div>     
+                  </div>
+                 
+                  <div class="form-group">
+                      <label for="Trip_Description">Trip Description</label>
+                      <textarea [disabled]="true" class="form-control" id="trip_description" name="description" value={{tripData?.Description}} rows="3"></textarea>
+                  </div>
+              </form>
+              <div class="panel-group" id="accordion"> 
+                  <table  class='table'>
+                  <tr>
+                    <td>
+                        <div class="card"> 
+                        <div class="card-header" id="headingOne">
+                          <h5 class="mb-0"> 
+                          <a  data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1" onclick="return false">Trip Stops <span class="oi oi-caret-bottom" style="float:none"></span></a> 
+                          </h5> 
+                        </div> 
+                        <div id="collapse1" class="collapse" aria-labelledby="headingOne" data-parent="#accordion"> 
+                          <div class="card-body"> 
+                            <!--insert tabular data-->
+                    <table  class='table'>
+                        <tr *ngFor="let stop of stopData">
+    <table class='table'>
+      <tr>
+        <td align="right">
+          <a class='btn btn-danger m-r-5px' style="color:white"> <span class='fa fa-exclamation-triangle' style="color:white" data-dismiss="modal" data-target="#ViewStopRiskListModal" data-toggle="modal" (click)="readStopRisks(stop.StopID)"></span> Risks </a>
+          <a class='btn btn-danger m-r-5px' style="color:white"><span class='fa fa-check-square-o' style="color:white" data-dismiss="modal" data-target="#ViewStopTaskListModal" data-toggle="modal" (click)="readStopTasks(stop.StopID)"></span> Tasks </a>
+        </td>
+      </tr>
+</table>
+<table class='table' frame="below">
+    <tr>
+        <td align="left">
+          <a class="nav-link active"> {{stop.StopName}} </a>
+        </td>
+        <td align="right">
+          <a class='btn btn-secondary'><span class='fa fa-info-circle bright-btn' style="color:white" data-dismiss="modal" data-target="#ViewStopDataModal" data-toggle="modal" (click)="viewStopData(stop.StopID)"></span></a>
+          <!--<a class='btn btn-secondary m-r-5px'><span class='fa fa-edit bright-btn' style="color:white"></span></a>
+          <a class='btn btn-danger'><span class='fa fa-remove bright-btn' style="color:white"></span></a>-->
+        </td>
+      </tr>
+    </table>
+                        </tr>
+                    </table>	
+                          </div> 
+                        </div> 
+                      </div> 
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="card">
+                        <div class="card-header" id="headingTwo">
+                          <h5 class="mb-0">				
+                          <a class="collapsed" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">Trip Risks <span class="oi oi-caret-bottom" style="float:none"></span></a> 
+                          </h5> 
+                        </div> 
+                        <div id="collapse2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion"> 
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <table  class='table'>
+                                  <tr *ngFor="let tripRisk of tripRiskData">
+                                    <td>
+                                      <a class="nav-link active"> {{tripRisk.RiskName}} </a>
+                                    </td>
+                                    <td align="right">
+                                        <a class='btn btn-secondary'><span class='fa fa-info-circle bright-btn' style="color:white" data-dismiss="modal" data-target="#ViewTripRiskDataModal" data-toggle="modal" (click)=" viewTripRiskData(tripData?.TripID, 0)"></span></a>
+                                      <!--<a class='btn btn-secondary m-r-5px'><span class='fa fa-edit bright-btn' style="color:white"></span></a>
+                                      <a class='btn btn-danger'><span class='fa fa-remove bright-btn' style="color:white"></span></a>-->
+                                    </td>
+                                  </tr>
+                                </table>
+                              </div>
+                                          </div>	
+                          </div>
+                        </div> 
+                      </div> 
+                    </td>
+                  </tr>
+                  <tr>
+                      <td>
+                        <div class="card">
+                          <div class="card-header" id="headingFour">
+                            <h5 class="mb-0">				
+                            <a class="collapsed" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapse4">Trip Participants <span class="oi oi-caret-bottom" style="float:none"></span></a> 
+                            </h5> 
+                          </div> 
+                          <div id="collapse4" class="collapse" aria-labelledby="headingFour" data-parent="#accordion"> 
+                            <div class="card-body">                         
+                              <!--insert tabular data-->
+                              <table  class='table'>
+                                <tr *ngFor="let part of partData">
+                                      <td align="left">
+                                        <a class="nav-link active"> {{part.FirstName}} {{part.LastName}}</a>
+                                      </td>
+                                </tr>
+                              </table>	
+                            </div>
+                          </div> 
+                        </div> 
+                      </td>
+                    </tr>                  
+                  <tr>
+                      <td>
+                        <div class="card">
+                          <div class="card-header" id="headingThree">
+                            <h5 class="mb-0">				 
+                            <a data-dismiss="modal" data-target="#emergencyContactView" data-toggle="modal" (click)=readEemCon()>Emergency Contact Details <span class="oi oi-caret-bottom" style="float:none"></span></a> 
+                            </h5> 
+                          </div> 
+                        </div> 
+                      </td>
+                    </tr>                  
+                </table>
+              </div>          
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="" data-dismiss="modal" >Close</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<!--view stop data Modal Starts-->
+<div style="overflow-y: scroll;" class="modal fade" id="ViewStopDataModal" tabindex="-1" role="dialog" aria-labelledby="ViewStopDataModalTitle" aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ViewStopDataModalLongTitle">Stop Summary</h5>
+                <button type="button" class="close" data-dismiss="modal" data-target="#stop" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="stop_Name">Stop Name</label>
+                        <input [disabled]="true" type="text" class="form-control" name="stop_name" value={{oneStopData?.StopName}} id="stop_name" placeholder="">    
+                    </div>
+                    <div class="form-group">
+                      <div class = "row">
+                        <div class = "col m3">
+                            <label for="lat">Latitude</label>
+                            <input [disabled]="true" type="text" class="form-control" id="lat" ngModel name="lat" #lat="ngModel" [(ngModel)]="stop_latitude" value={{oneStopData?.Lat}} placeholder="Latitude">
+                        </div>
+                        <div class = "col m3">
+                            <label for="lng">Logitude</label>
+                            <input [disabled]="true" type="text" class="form-control" id="lng" ngModel name="lng" #lng="ngModel" [(ngModel)]="stop_longitude" value={{oneStopData?.Lng}} placeholder="Longitude">
+                        </div>
+                    </div>     
+                    </div>
+                    <div class="form-group">
+                        <label for="stop_Loc">Stop Location</label>
+                        <input [disabled]="true" type="text" class="form-control" name="stop_loc" value={{oneStopData?.Location}} id="stop_loc" placeholder="">    
+                    </div>
+                    <div class="form-group">
+                        <label for="stop_desc">Stop Description</label>
+                        <textarea [disabled]="true" class="form-control" id="stop_desc" name="stop_desc" value={{oneStopData?.Description}} rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#ViewTripDataModal" data-dismiss="modal" >Back To Trip Summary</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+
+    <!--view stop task list Modal Starts-->
+<div style="overflow-y: scroll;" class="modal fade" id="ViewStopTaskListModal" tabindex="-1" role="dialog" aria-labelledby="ViewStopTaskListModalTitle" aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ViewStopTaskListModalLongTitle">Stop Task Summary</h5>
+                <button type="button" class="close" data-dismiss="modal" data-target="#ViewStopDataModal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row m-b-18px">
+                    <div class="col-md-12">
+                        <a style="color:white" class='btn btn-danger pull-right'>
+                            <span class='fa fa-list bright-btn'></span> Export PDF
+                        </a>
+                    </div>
+                  </div>                  
+                <div id="taskAccordion"> 
+                    <div class="card" *ngFor="let task of taskData; let j = index"> 
+                      <div class="card-header" (click) = "currentTask = j">
+                        <h5 class="mb-0"> 
+                          {{task.Category}} <span class="oi oi-caret-bottom" style="float:none"></span>
+                        </h5> 
+                      </div> 
+                      <div id="taskCollapse1" class="collapse" [class.collapse]='currentTask != j'> 
+                        <div class="card-body">
+                          <!--insert table data-->
+                          <table class='table table-hover'>
+                      <tr>
+                        <td>Task Category</td>
+                        <td>
+                          {{task.Category}}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Task Description
+                        </td>
+                        <td>
+                          {{task.Description}}
+                        </td>
+                      </tr>
+                    </table>
+                        </div> 
+                      </div> 
+                    </div> 
+                </div>	
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#ViewTripDataModal" data-dismiss="modal" >Back To Trip Summary</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+
+      <!--view stop risk list Modal Starts-->
+<div style="overflow-y: scroll;" class="modal fade" id="ViewStopRiskListModal" tabindex="-1" role="dialog" aria-labelledby="ViewStopRiskListModalTitle" aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ViewStopRiskListModalLongTitle">Stop Risk Summary</h5>
+                <button type="button" class="close" data-dismiss="modal" data-target="#ViewStopDataModal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row m-b-18px">
+                    <div class="col-md-12">
+                        <a style="color:white" class='btn btn-danger pull-right'>
+                            <span class='fa fa-list bright-btn'></span> Export PDF
+                        </a>
+                    </div>
+                  </div>                  
+                <div id="riskAccordion"> 
+                    <div class="card" *ngFor="let risk of riskData; let k = index"> 
+                      <div class="card-header" (click) = "currentRisk = k">
+                        <h5 class="mb-0"> 
+                          {{risk.RiskName}} <span class="oi oi-caret-bottom" style="float:none"></span>
+                        </h5> 
+                      </div> 
+                      <div id="riskCollapse1" class="collapse" [class.collapse]='currentRisk != k'> 
+                        <div class="card-body">
+                          <!--insert table data-->
+                          <table class='table table-hover'>
+                              <tr>
+                                  <td>Risk Name</td>
+                                  <td>{{risk.RiskName}}</td>
+                              </tr>
+                    
+                              <tr>
+                                <td>Risk Description</td>
+                                <td>{{risk.Description}}</td>
+                            </tr>
+                    
+                              <tr>
+                                  <td>Outcrop</td>
+                                  <td>{{risk.Outcrop}}</td>
+                              </tr>
+                    
+                              <tr>
+                                  <td>Class</td>
+                                  <td>{{risk.Class}}</td>
+                              </tr>
+                    
+                              <tr>
+                                  <td>Probability</td>
+                                  <td>{{risk.Probability}}</td>
+                              </tr>
+                    
+                              <tr>
+                                <td>Rating</td>
+                                <td>{{risk.Rating}}</td>
+                              </tr>
+                    
+                              <tr>
+                                <td>Mitigation</td>
+                                <td>{{risk.Mitigation}}</td>
+                              </tr>
+                    
+                              <tr>
+                                <td>PPE</td>
+                                <td>{{risk.Ppe}}</td>
+                             </tr>
+                    
+                             <tr>
+                                <td>Required Equipment</td>
+                                <td>{{risk.ReqEquipment}}</td>
+                             </tr>
+                    
+                             <tr>
+                                <td>Specific Warnings</td>
+                                <td>{{risk.SpWarning}}</td>
+                             </tr>
+                    
+                              <tr>
+                                <td>Responsible</td>
+                                <td>{{risk.Responsible}}</td>
+                              </tr>
+                    
+                              <tr>
+                                <td>Risk Effect</td>
+                                <td>{{risk.Effect}}</td>
+                              </tr>
+                    
+                              <tr>
+                                <td>Worst Outcome</td>
+                                <td>{{risk.WorstOutcome}}</td>
+                              </tr>
+                    
+                              <tr>
+                                <td>Residual Risk</td>
+                                <td>{{risk.ResidualRisk}}</td>
+                             </tr>
+
+
+                    </table>
+                        </div> 
+                      </div> 
+                    </div> 
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#ViewTripDataModal" data-dismiss="modal" >Back To Trip Summary</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+
+        <!--view trip risk list Modal Starts-->
+<div style="overflow-y: scroll;" class="modal fade" id="ViewTripRiskDataModal" tabindex="-1" role="dialog" aria-labelledby="ViewTripRiskDataModalTitle" aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ViewTripRiskDataModalLongTitle">Trip Risk Summary</h5>
+                <button type="button" class="close" data-dismiss="modal" data-target="#ViewStopDataModal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row m-b-18px">
+                    <div class="col-md-12">
+                        <a style="color:white; margin: 10px;" class='btn btn-danger pull-right'>
+                            <span class='fa fa-list bright-btn'></span> Export PDF
+                        </a>
+                    </div>
+                  </div>                  
+                <div id="tripRiskAccordion"> 
+                    <div class="card" *ngFor="let tripRisk of tripRiskData; let p = index"> 
+                      <div class="card-header" (click) = "currentTripRisk = p">
+                        <h5 class="mb-0"> 
+                          {{tripRisk.RiskName}} <span class="oi oi-caret-bottom" style="float:none"></span>
+                        </h5> 
+                      </div> 
+                      <div id="tripRiskCollapse1" class="collapse" [class.collapse]='currentTripRisk != p'> 
+                        <div class="card-body">
+                          <!--insert table data-->
+                          <table class='table table-hover'>
+                              <tr>
+                                  <td>Risk Name</td>
+                                  <td>{{tripRisk.RiskName}}</td>
+                              </tr>
+                    
+                              <tr>
+                                <td>Risk Description</td>
+                                <td>{{tripRisk.Description}}</td>
+                            </tr>
+                    
+                              <tr>
+                                  <td>Outcrop</td>
+                                  <td>{{tripRisk.Outcrop}}</td>
+                              </tr>
+                    
+                              <tr>
+                                  <td>Class</td>
+                                  <td>{{tripRisk.Class}}</td>
+                              </tr>
+                    
+                              <tr>
+                                  <td>Probability</td>
+                                  <td>{{tripRisk.Probability}}</td>
+                              </tr>
+                    
+                              <tr>
+                                <td>Rating</td>
+                                <td>{{tripRisk.Rating}}</td>
+                              </tr>
+                    
+                              <tr>
+                                <td>Mitigation</td>
+                                <td>{{tripRisk.Mitigation}}</td>
+                              </tr>
+                    
+                              <tr>
+                                <td>PPE</td>
+                                <td>{{tripRisk.Ppe}}</td>
+                             </tr>
+                    
+                             <tr>
+                                <td>Required Equipment</td>
+                                <td>{{tripRisk.ReqEquipment}}</td>
+                             </tr>
+                    
+                             <tr>
+                                <td>Specific Warnings</td>
+                                <td>{{tripRisk.SpWarning}}</td>
+                             </tr>
+                    
+                              <tr>
+                                <td>Responsible</td>
+                                <td>{{tripRisk.Responsible}}</td>
+                              </tr>
+                    
+                              <tr>
+                                <td>Risk Effect</td>
+                                <td>{{tripRisk.Effect}}</td>
+                              </tr>
+                    
+                              <tr>
+                                <td>Worst Outcome</td>
+                                <td>{{tripRisk.WorstOutcome}}</td>
+                              </tr>
+                    
+                              <tr>
+                                <td>Residual Risk</td>
+                                <td>{{tripRisk.ResidualRisk}}</td>
+                             </tr>
+
+
+                    </table>
+                        </div> 
+                      </div> 
+                    </div> 
+                </div>                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#ViewTripDataModal" data-dismiss="modal" >Back To Trip Summary</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+
+<!-- Emergency Contact Modal for Viewing details -->
+<div style="overflow-y: scroll;" class="modal" tabindex="-1" role="dialog" id="emergencyContactView">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h5 class="modal-title" id="CreateTripTitle">Emergency Contact Form</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+  
+      </div>
+      <div class="modal-body" id="summary-modal" >
+              <table class="table table-hover">
+                      <tbody>
+                        <tr>
+                          <td style="border-top: none;">Field Activity Name</td>
+                          <td style="border-top: none;">
+                {{oneECData?.FieldActivityName}}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Field Leader and Cell</td>
+                          <td>
+                {{oneECData?.FieldLeaderCell}}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Field dates</td>
+                          <td>
+                {{oneECData?.FieldDates}}
+                          </td>
+                        </tr>
+  <!--Communications-->
+  
+                        <tr><td colspan="2" id="divider">Communications</td>
+                          </tr>
+  
+                        <tr>
+                              <td>To the group</td>
+                              <td>
+                {{oneECData?.ToGroup}}
+                              </td>
+                      </tr>
+  
+                      
+                      <tr>
+                              <td>From the group </td>
+                              <td>
+                {{oneECData?.FromGroup}}
+                              </td>
+                      </tr>
+  
+                      <tr>
+                              <td>Local Emergency Services</td>
+                              <td>
+                {{oneECData?.LocalEmergency}}
+                              </td>
+                      </tr>
+  
+                      <tr>
+                              <td>Country and district code</td>
+                              <td>
+                {{oneECData?.Code}}
+                              </td>
+                      </tr>
+  
+  
+                      <tr>
+                              <td>Planned Call-in times</td>
+                              <td>
+                {{oneECData?.CallIn}}
+                              </td>
+                      </tr>
+  
+  
+                      <tr>
+                              <td>On Call Support Name and No.</td>
+                              <td>
+                {{oneECData?.OnCall}}
+                              </td>
+                      </tr>
+  
+                      <tr>
+                              <td>Insurance </td>
+                              <td>
+                {{oneECData?.Insurance}}
+                              </td>
+                      </tr>
+  
+                      <tr>
+                              <td>ISOS Number and Account:</td>
+                              <td>
+                {{oneECData?.ISOSNumber}}
+                              </td>
+                      </tr>
+  
+  
+                      <tr><td colspan="2" id="divider">Medical</td>
+                      </tr>
+  
+                      <tr>
+                              <td>First Aid trained staff</td>
+                              <td>
+                {{oneECData?.FirstAid}}
+                              </td>
+                      </tr>
+                      <tr>
+                              <td>First Aid kits</td>
+                              <td>
+                {{oneECData?.FirstAidkits}}
+                              </td>
+                      </tr>
+                      <tr>
+                              <td>Nearest doctor or medical centre</td>
+                              <td>
+                {{oneECData?.MedicalCentre}}
+                              </td>
+                      </tr>
+                      <tr>
+                              <td>Nearest major hospital</td>
+                              <td>
+                {{oneECData?.NearestHospital}}
+                              </td>
+                      </tr>
+                      <tr>
+                              <td>Location of definitive care</td>
+                              <td>
+                {{oneECData?.DefinitiveCare}}
+                              </td>
+                      </tr>
+                      <tr>
+                              <td>Location of closest pharmacy</td>
+                              <td>
+                {{oneECData?.ClosestPharmacy}}
+                              </td>
+                      </tr>
+  
+                      <tr><td colspan="2" id="divider">Incident Management Chain of Command</td>
+                      </tr>
+  
+                      
+                      <tr>
+                              <td>Initial Response actions</td>
+                              <td>
+                {{oneECData?.InitialResponse}}
+                              </td>
+                      </tr>
+                      <tr>
+                              <td>Escalate to Crisis Centre if</td>
+                              <td>
+                {{oneECData?.EscalateCrisis}}
+                              </td>
+                      </tr>
+                      <tr>
+                              <td>What to say to the Crisis Centre</td>
+                              <td>
+                {{oneECData?.CrisisCentre}}
+                              </td>
+                      </tr>
+  
+                      <tr><td colspan="2" id="divider">Transport</td>
+                      </tr>
+                      <tr>
+                              <td>Transport options </td>
+                              <td>
+                {{oneECData?.Transport}}
+                              </td>
+                      </tr>
+                      <tr>
+                              <td>Local logistical support </td>
+                              <td>
+                {{oneECData?.LogisticalSupport}}
+                              </td>
+                      </tr>
+                      <tr>
+                              <td>Other Support</td>
+                              <td>
+                {{oneECData?.Other}}
+                              </td>
+                      </tr>
+                      <tr>
+                              <td>Accommodation</td>
+                              <td>
+                {{oneECData?.Accommodation}}
+                              </td>
+                      </tr>
+                      <tr>
+                              <td>Participant contact details</td>
+                              <td>
+                {{oneECData?.ParticipantContact}}
+                              </td>
+                      </tr>
+  
+                      </tbody>
+                    </table>
+   
+      </div>
+      <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#ViewTripDataModal" data-dismiss="modal" >Back To Trip Summary</button>
+      </div>
+    </div>
+  </div>
+  </div>  

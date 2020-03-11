@@ -1,0 +1,174 @@
+<div class="row m-b-18px">
+  <div class="col-md-12">
+      <a style="color:white" (click)="readTripRisks()" class='btn btn-danger pull-right'>
+          <span class='fa fa-list bright-btn'></span> Back to Trip Risks Assessment
+      </a>
+  </div>
+</div>
+
+<div class="row">
+<div class="col-md-12">
+
+<!-- HTML form for creating a triprisk -->
+<form [formGroup]="update_triprisk_form" (ngSubmit)="updateTripRisk()">
+<table class='table table-hover text-right'>
+
+  <tr>
+      <td>Risk Name</td>
+      <td>
+          <input formControlName="riskName"
+              type='text' name='riskName'
+              class='form-control' value={{riskData?.RiskName}} required />
+          <!-- show this error if the field is 'touched' and 'empty' -->
+          <!--<div
+              *ngIf="update_triprisk_form.get('riskName').touched && update_triprisk_form.get('riskName').hasError('required')"
+              class="alert alert-danger">
+              Risk Name is required.
+          </div>-->
+      </td>
+  </tr>
+
+  <tr>
+    <td>Description</td>
+    <td>
+        <input
+            formControlName="desc"
+            type='text' name='desc'
+            class='form-control' value={{riskData?.Description}} required />
+    </td>
+  </tr>
+
+  <tr>
+      <td>Outcrop</td>
+      <td>
+          <input
+              formControlName="outcrop"
+              type='text' name='outcrop'
+              class='form-control' value={{riskData?.Outcrop}} required />
+      </td>
+</tr>
+
+ <tr>
+    <td>Class</td>
+    <td>
+        <input
+            formControlName="class"
+            type='text' name='class'
+            class='form-control' value={{riskData?.Class}} required />
+    </td>
+</tr>
+
+<tr>
+  <td>Probabiility</td>
+  <td>
+      <input
+          formControlName="prob"
+          type='text' name='prob'
+          class='form-control' value={{riskData?.Probability}} required />
+  </td>
+</tr>
+
+<tr>
+  <td>Rating</td>
+  <td>
+      <input
+          formControlName="rating"
+          type='text' name='rating'
+          class='form-control' value={{riskData?.Rating}} required />
+  </td>
+</tr>
+
+<tr>
+  <td>Mitigation</td>
+  <td>
+      <input
+          formControlName="mitigation"
+          type='text' name='mitigation'
+          class='form-control' value={{riskData?.Mitigation}} required />
+  </td>
+</tr>
+
+<tr>
+    <td>PPE</td>
+    <td>
+        <input
+            formControlName="ppe"
+            type='text' name='ppe'
+            class='form-control' value={{riskData?.Ppe}} required />
+    </td>
+</tr>
+
+<tr>
+    <td>Required Equipments</td>
+    <td>
+        <input
+            formControlName="reqEq"
+            type='text' name='reqEq'
+            class='form-control' value={{riskData?.ReqEquipment}} required />
+    </td>
+</tr>
+
+<tr>
+    <td>Specific Warnings</td>
+    <td>
+        <input
+            formControlName="spWarn"
+            type='text' name='spWarn'
+            class='form-control' value={{riskData?.SpWarning}} required />
+    </td>
+</tr>
+
+<tr>
+  <td>Person Responsible</td>
+  <td>
+      <input
+          formControlName="resp"
+          type='text' name='resp'
+          class='form-control' value={{riskData?.Responsible}} required />
+  </td>
+</tr>
+
+<tr>
+    <td>Risk Effect</td>
+    <td>
+        <input
+            formControlName="effect"
+            type='text' name='effect'
+            class='form-control' value={{riskData?.Effect}} required />
+    </td>
+</tr>
+
+<tr>
+    <td>Worst Outcome</td>
+    <td>
+        <input
+            formControlName="wOut"
+            type='text' name='wOut'
+            class='form-control' value={{riskData?.WorstOutcome}} required />
+    </td>
+</tr>
+
+<tr>
+    <td>Residual Risk</td>
+    <td>
+        <input
+            formControlName="resRisk"
+            type='text' name='resRisk'
+            class='form-control' value={{riskData?.ResidualRisk}} required />
+    </td>
+</tr>
+
+</table>
+
+
+          <!-- Submit buttons is [disabled] if form is invalid. [disabled]="update_triprisk_form.invalid" -->
+          <button class="btn btn-danger btn-lg btn-block" type="submit" >
+              <span class="fa fa-edit" style="color:white"></span> Update
+          </button>
+
+
+
+</form>
+
+</div>
+</div>

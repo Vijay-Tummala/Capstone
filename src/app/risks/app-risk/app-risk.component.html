@@ -1,0 +1,95 @@
+    <div class="modal fade" style="overflow-y: scroll;" id="RiskModal1" tabindex="-1" role="dialog" aria-labelledby="RiskModalTitle" aria-hidden="true" data-backdrop="false">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="StopRiskTitle">{{title}}</h5>
+                  </div>
+                   <!--<div class='page-header'><h1>{{title}}</h1></div>
+             </div>
+          </div>-->
+          <div class="modal-body">
+          <!-- Show this view if "show_read_risks_html" property of AppComponent is true. -->
+          <app-read-risks
+          *ngIf="show_read_risks_html"
+          [risk_id]="risk_id"
+          [riskTripID]="riskTripID"
+          [riskStopID]="riskStopID"
+          [startTripFlow]="startTripFlow"
+          (show_read_risks_event)="showReadRisks($event)"
+          (show_create_risk_event)="showCreateRisk($event)"
+          (show_read_one_risk_event)="showReadOneRisk($event)"
+          (show_update_risk_event)="showUpdateRisk($event)"
+          (show_delete_risk_event)="showDeleteRisk($event)">
+          </app-read-risks>
+        
+        
+          <!--
+            * Show this view if "show_create_risk_html" is true.
+         
+            * If (show_read_risks_event) was emitted in CreateriskComponent,
+              trigger showReadrisks() method in AppComponent.
+          -->
+          <app-create-risk
+          *ngIf="show_create_risk_html"
+          (show_read_risks_event)="showReadRisks($event)"></app-create-risk>
+        
+          <!--
+            * Show this view if "show_read_one_risk_html" is true.
+         
+            * If (show_read_risks_event) was emmited in ReadOneRiskComponent,
+              trigger showReadRisks() method in AppRiskComponent.
+         
+            * Pass "risk_id" property value of AppRiskComponent
+              to [risk_id] property of ReadOneRiskComponent.
+        -->
+          <app-read-one-risk
+          *ngIf="show_read_one_risk_html"
+          (show_read_risks_event)="showReadRisks($event)"
+          [risk_id]="risk_id">
+          </app-read-one-risk>
+        
+          <!--
+            * Show this view if "show_update_risk_html" is true.
+         
+            * Pass "risk_id" property value of AppComponent
+              to [risk_id] property of UpdateRiskComponent.
+         
+            * If (show_read_risks_event) was emitted in UpdateRiskComponent,
+              trigger showReadRisks() method in AppComponent.
+        -->
+            <app-update-risk
+            *ngIf="show_update_risk_html"
+            [risk_id]="risk_id"
+            (show_read_risks_event)="showReadRisks($event)">
+            </app-update-risk>
+        
+        <!--
+            * Show this view if "show_delete_risk_html" is true.
+         
+            * Pass "risk_id" property value of AppComponent
+              to [risk_id] property of UpdateRiskComponent.
+         
+            * If (show_read_risks_event) was emitted in DeleteRiskComponent,
+              trigger showReadRisks() method in AppComponent.
+        -->
+            <app-delete-risk
+                *ngIf="show_delete_risk_html"
+                [risk_id]="risk_id"
+                (show_read_risks_event)="showReadRisks($event)">
+            </app-delete-risk>
+        </div>
+        <div class="modal-footer">
+                <div *ngIf="mapObject.isStopRiskEdit;then edit else create"></div>
+                <ng-template #edit>
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#EditStopDataModal" data-dismiss="modal" >Back To Stop Summary</button>
+                </ng-template>
+                <ng-template #create>
+                        <button type="button" data-toggle="modal" data-target="#StopSummaryModal" class="btn btn-secondary" data-dismiss="modal">Back to Stops</button>
+                </ng-template>
+            <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+            <!--<button type="button" data-toggle="modal" data-target="#StopSummaryModal" class="btn btn-primary" data-dismiss="modal">Back to Stops</button>-->
+        </div>
+        </div>
+        </div>
+        </div>
+        

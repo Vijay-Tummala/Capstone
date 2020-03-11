@@ -1,0 +1,233 @@
+<!--edit trip data Modal Starts-->
+<div style="overflow-y: scroll;" class="modal fade" id="EditTripDataModal" tabindex="-1" role="dialog" aria-labelledby="EditTripDataModalTitle" aria-hidden="true" data-backdrop="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="EditTripDataModalLongTitle">Trip Summary</h5>
+                    <!--<button type="button" class="close" data-dismiss="modal" data-target="#stop" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>-->
+                </div>
+                <div class="modal-body">
+                    <div class="row m-b-18px">
+                        <div class="col-md-12">
+                            <button type="button" class='btn btn-outline-danger pull-right'> 
+                                <span class='fa fa-list'></span> Export PDF
+                            </button>
+                        </div>
+                      </div>            
+                      <form [formGroup]="update_trip_form" (ngSubmit)="updateTrip()">
+                          <div class="form-group">
+                              <label for="Trip_Name">Trip Name</label>
+                              <input type="text" class="form-control" name="trip_name" formControlName="trip_name" value={{tripData?.TripName}} required>    
+                          </div>
+                          <div class="form-group">
+                              <div class = "row">
+                                  <div class = "col m6">
+                                      <label for="Start_Date">Start Date</label>
+                                      <input type="text" class="form-control" name="start_date" formControlName="start_date" value={{tripData?.StartDate}} required>
+                                  </div>
+                                  <div class = "col m6">
+                                      <label for="exampleInputEmail1">End Date</label>
+                                      <input type="text" class="form-control" name="end_date" formControlName="end_date" value={{tripData?.EndDate}} required>
+                                  </div>
+                              </div>     
+                          </div>						                       
+                          <div class="form-group">
+                              <label for="Trip_Description">Trip Description</label> 
+                              <textarea class="form-control" name="description" formControlName="description" rows="3" value={{tripData?.Description}} required></textarea>
+                          </div>                            
+                          <button type="submit" class="btn btn-outline-danger btn-lg btn-block"> 
+                          <span class="fa fa-edit"></span> Update Trip 
+                          </button>
+                      </form>
+    
+                    <div class="panel-group" id="editAccordion"> 
+                        <table  class='table'>
+                        <tr>
+                          <td>
+                              <div class="card"> 
+                              <div class="card-header" id="editHeadingOne">
+                                <h5 class="mb-0"> 
+                                <a (click)="triggerEditStop(tripData?.TripID)" data-dismiss="modal" data-target="#EditStopDataModal" data-toggle="modal">Trip Stops <span class="fa fa-angle-right" style="float:right"></span></a> 
+                                </h5> 
+                              </div> 
+                            </div> 
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="card">
+                              <div class="card-header" id="editHeadingTwo">
+                                <h5 class="mb-0">				
+                                <a (click)="triggerEditTripRisk(tripData?.TripID,0)" data-dismiss="modal" data-target="#TripRiskModal1" data-toggle="modal">Trip Risks <span class="fa fa-angle-right" style="float:right"></span></a> 
+                                </h5> 
+                              </div> 
+                            </div> 
+                          </td>
+                        </tr>
+                        <tr>
+                            <td>
+                              <div class="card">
+                                <div class="card-header" id="editHeadingFour">
+                                  <h5 class="mb-0">				
+                                  <a>Trip Participants <span class="fa fa-angle-right" style="float:right"></span></a> 
+                                  </h5> 
+                                </div> 
+                              </div> 
+                            </td>
+                          </tr>                  
+                        <tr>
+                            <td>
+                              <div class="card">
+                                <div class="card-header" id="editHeadingThree">
+                                  <h5 class="mb-0">				
+                                  <a>Emergency Contact Details <span class="fa fa-angle-right" style="float:right"></span></a> 
+                                  </h5> 
+                                </div> 
+                              </div> 
+                            </td>
+                          </tr>                  
+                      </table>
+                    </div>           
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="" data-dismiss="modal" (click)="unsetEditFlag()" >Close</button>
+                </div>
+            </div>
+        </div>
+      </div>
+    
+    
+    <!--edit trip stop data Modal Starts-->
+    <div style="overflow-y: scroll;" class="modal fade" id="EditStopDataModal" tabindex="-1" role="dialog" aria-labelledby="EditStopDataModalTitle" aria-hidden="true" data-backdrop="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="EditStopDataModalLongTitle">Stop Summary</h5>
+                </div>
+                <div class="modal-body">
+                                <!--insert tabular data-->
+                               <button type="button" class="btn btn-outline-danger btn-lg btn-block" data-toggle="modal" data-target="#IndividualStopModal" data-dismiss="modal" (click)="changeMapSetting()">
+                                        <span class="fa fa-plus"></span> Add Stop 
+                                </button>                                
+                        <table  class='table'>
+                            <tr *ngFor="let stop of stopData">
+        <table class='table'>
+          <tr>
+            <td align="right">
+              <button class='btn btn-outline-danger m-r-5px'><span class='fa fa-exclamation-triangle' data-dismiss="modal" data-target="#RiskModal1" data-toggle="modal" (click)="editStopRisks(stop.TripID, stop.StopID)"></span> Risks </button>
+              <button class='btn btn-outline-danger m-r-5px'><span class='fa fa-check-square-o' data-dismiss="modal" data-target="#TaskModal1" data-toggle="modal" (click)="editStopTasks(stop.TripID, stop.StopID)"></span> Tasks </button>
+            </td>
+          </tr>
+    </table>
+      <table class='table' frame="below">
+        <tr>
+            <td align="left">
+              <a class="nav-link active"> {{stop.StopName}} </a>
+            </td>
+            <td align="right">
+              <button class='btn btn-outline-secondary'><span class='fa fa-info-circle' data-dismiss="modal" data-target="#EditViewStopDataModal" data-toggle="modal" (click)="editViewStopData(stop.StopID)"></span></button>
+              <button class='btn btn-outline-secondary m-r-5px'><span class='fa fa-edit' data-dismiss="modal" data-target="#EditEditStopDataModal" data-toggle="modal" (click)="editViewStopData(stop.StopID)"></span></button> 
+              <button class='btn btn-outline-danger'><span class='fa fa-remove' (click)="editDeleteStopData(stop.TripID, stop.StopID)"></span></button>
+            </td>
+          </tr>
+        </table>
+                            </tr>
+                        </table>				
+             
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#EditTripDataModal" data-dismiss="modal" >Back to Trips</button>
+                </div>
+            </div>
+        </div>
+      </div>	  
+    
+    
+      <!--view stop data Modal Starts-->
+    <div style="overflow-y: scroll;" class="modal fade" id="EditViewStopDataModal" tabindex="-1" role="dialog" aria-labelledby="EditViewStopDataModalTitle" aria-hidden="true" data-backdrop="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="EditViewStopDataModalLongTitle">Stop Details</h5>
+                </div>
+                <div class="modal-body">
+                    <form>                   
+                        <div class="form-group">
+                            <label for="stop_Name">Stop Name</label>
+                            <input [disabled]="true" type="text" class="form-control" name="stop_name" value={{oneStopData?.StopName}} id="stop_name" placeholder="">    
+                        </div>
+                        <div class="form-group">
+                            <div class = "row">
+                                <div class = "col m6">
+                                    <label for="lat">Latitude</label>
+                                    <input [disabled]="true" type="text" class="form-control" id="lat" name="lat" value={{oneStopData?.Lat}} placeholder="">
+                                </div>
+                                <div class = "col m6">
+                                    <label for="lng">Logitude</label>
+                                    <input [disabled]="true" type="text" class="form-control" id="lng" name="lng" value={{oneStopData?.Lng}} placeholder="">
+                                </div>
+                            </div>     
+                        </div>
+                        <div class="form-group">
+                            <label for="stop_Loc">Stop Location</label>
+                            <input [disabled]="true" type="text" class="form-control" name="stop_loc" value={{oneStopData?.Location}} id="stop_loc" placeholder="">    
+                        </div>
+                        <div class="form-group">
+                            <label for="stop_desc">Stop Description</label>
+                            <textarea [disabled]="true" class="form-control" id="stop_desc" name="stop_desc" value={{oneStopData?.Description}} rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#EditStopDataModal" data-dismiss="modal" >Back To Stop Summary</button>
+                </div>
+            </div> 
+        </div>
+      </div>
+    
+        <!--edit edit stop data Modal Starts-->
+    <div style="overflow-y: scroll;" class="modal fade" id="EditEditStopDataModal" tabindex="-1" role="dialog" aria-labelledby="EditEditStopDataModalTitle" aria-hidden="true" data-backdrop="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="EditEditStopDataModalLongTitle">Stop Details</h5>
+                </div>
+                <div class="modal-body">
+                    <form [formGroup]="update_stop_form" (ngSubmit)="editStopFields(oneStopData?.StopID)">
+                        <div class="form-group">
+                            <label for="stop_Name">Stop Name</label>
+                            <input type="text" class="form-control" name="StopName" value={{oneStopData?.StopName}} formControlName="StopName" required>    
+                        </div>
+                        <div class="form-group">
+                            <div class = "row">
+                                <div class = "col m6">
+                                    <label for="lat">Latitude</label>
+                                    <input type="text" class="form-control" formControlName="Lat" name="Lat" value={{oneStopData?.Lat}} placeholder="" required>
+                                </div>
+                                <div class = "col m6">
+                                    <label for="lng">Longitude</label>
+                                    <input type="text" class="form-control" formControlName="Lng" name="Lng" value={{oneStopData?.Lng}} placeholder="" required>
+                                </div>
+                            </div>     
+                        </div>
+                        <div class="form-group">
+                            <label for="stop_Loc">Stop Location</label>
+                            <input type="text" class="form-control" name="Location" value={{oneStopData?.Location}} formControlName="Location" placeholder="" required>    
+                        </div>
+                        <div class="form-group">
+                            <label for="stop_desc">Stop Description</label>
+                            <textarea class="form-control" formControlName="Description" name="Description" value={{oneStopData?.Description}} rows="3"></textarea>
+                        </div>
+                        <button class="btn btn-danger btn-lg btn-block" type="submit">
+                            <span class="fa fa-edit" style="color:white"></span> Update
+                        </button>                    
+                    </form>
+                </div>
+                <div class="modal-footer"> 
+                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#EditStopDataModal" data-dismiss="modal">Back To Stop Summary</button>
+                </div>
+            </div>
+        </div>
+      </div> 

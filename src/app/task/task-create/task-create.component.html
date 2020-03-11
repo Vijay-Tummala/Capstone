@@ -1,0 +1,127 @@
+<div class="row m-b-18px">
+    <div class="col-md-12">
+      <a style="color:white" (click)="readTasks()" class='btn btn-danger pull-right bright-btn'>
+          <span class='fa fa-list bright-btn'></span> Back to Tasks Assessment
+      </a>
+  </div>
+</div>
+
+<!-- HTML form for creating a risk -->
+<div class="row modal-dialog modal-dialog-centered">
+<!-- <div class="col-md-6 modal-content"> -->
+<div class="modal-content">
+
+
+<form [formGroup]="create_task_form" (ngSubmit)="createTask()">
+<table class="table table-hover text-right">
+  <tr>
+      <td>Task Description</td>
+      <td>
+          <!-- Bind this input field to our 'angular form field' using formControlName -->
+          <input
+              formControlName="Description"
+              name="Description" placeholder="Enter Task Description" type="text"
+              class="form-control" required />
+
+          <!-- show this error if the field is 'empty' and 'touched' -->
+          <div
+              *ngIf="create_task_form.get('Description').touched && create_task_form.get('Description').hasError('required')"
+              class="alert alert-danger">
+              Task Description is required.
+          </div>
+      </td>
+  </tr>
+
+  <tr>
+    <td>Task Category</td>
+    <td>
+        <!-- Bind this input field to our 'angular form field' using formControlName -->
+        <input
+            formControlName="Category"
+            name="Category" Placeholder="Enter Task Category" type="text"
+            class="form-control" required />
+
+        <!-- show this error if the field is 'empty' and 'touched' -->
+        <div
+            *ngIf="create_task_form.get('Category').touched && create_task_form.get('Category').hasError('required')"
+            class="alert alert-danger">
+            Task Category is required.
+        </div>
+    </td>
+  </tr>
+
+
+  <tr>
+        <td>
+            <label for="QuestionType">
+                    Question Type
+            </label>
+        </td>
+        <td>
+            <select (change)="selectChangeHandler($event)" formControlName="QuestionType" class="form-control" required>
+            <option value=''>Choose a Task</option>
+            <option value="Take a photo">Take a photo</option>
+            <option value="Measure Dip and Strike" selected="selected">Measure Dip and Strike</option>
+            <option value="Paleocurrent">Paleocurrent</option>
+            <option value="Notes">Notes</option>
+            </select>
+            <div
+                *ngIf="create_task_form.get('QuestionType').touched && create_task_form.get('QuestionType').hasError('required')"
+                class="alert alert-danger">
+                Task Question Type is required.
+            </div>
+        </td>
+    </tr>
+
+
+  <tr>
+    <td>Task Question</td>
+    <td>
+        <!-- Bind this input field to our 'angular form field' using formControlName -->
+        <input
+            formControlName="Question"
+            name="Question" Placeholder="Enter Task Question" type="text"
+            class="form-control" required />
+
+        <!-- show this error if the field is 'empty' and 'touched' -->
+        <div
+            *ngIf="create_task_form.get('Question').touched && create_task_form.get('Question').hasError('required')"
+            class="alert alert-danger">
+            Task Question is required.
+        </div>
+    </td>
+  </tr>
+
+ <!-- <tr>
+      <td>StopID</td>
+      <td>
+          <input
+              formControlName="StopID"
+              type="text" Placeholder="Enter StopID" name="StopID"
+              class="form-control" required />
+
+          <!-- show this error if the field is 'empty' and 'touched' -->
+          <!--<div
+              *ngIf="create_task_form.get('StopID').touched && create_task_form.get('StopID').hasError('required')"
+              class="alert alert-danger">
+              StopID is required.
+          </div>
+      </td>
+  </tr>-->
+
+</table>
+
+  <!--<tr>
+      <td></td>
+      <td>-->
+          <!-- disable the submit button if the form is 'invalid' -->
+          <button class="btn btn-danger btn-lg btn-block" type="submit" [disabled]="create_task_form.invalid">
+              <span class="fa fa-plus" style="color:white"></span> Add Task
+          </button>
+      <!--</td>
+  </tr>-->
+
+</form>
+
+</div>
+</div>

@@ -1,0 +1,7 @@
+.table {
+    height: 100% !important;
+}
+
+.modal-open {
+    overflow: inherit;
+  }

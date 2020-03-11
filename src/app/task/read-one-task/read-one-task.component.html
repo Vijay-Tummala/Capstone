@@ -1,0 +1,58 @@
+<div class="row m-b-18px">
+    <div class="col-md-12">
+        <a style="color:white" (click)="readTasks()" class='btn btn-danger pull-right'>
+            <span class='fa fa-list bright-btn'></span> Back to Tasks Assessment
+        </a>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-12">
+        <!-- HTML table for displaying a risk details -->
+        <table class='table table-hover'>
+  
+            <tr>
+                <td class="w-40-pct">Task Description</td>
+                <td>{{taskData?.Description}}</td>
+            </tr>
+  
+            <tr>
+              <td> Task Category</td>
+              <td>{{taskData?.Category}}</td>
+            </tr>
+            
+            <tr>
+                <td> Task Question Type</td>
+                <td>{{taskData?.QuestionType}}</td>
+            </tr>
+
+            <tr>
+                <td> Task Question</td>
+                <td>{{taskData?.Question}}</td>
+            </tr>
+  
+           <!-- <tr>
+                <td>StopID</td>
+                <td>{{taskData?.StopID}}</td>
+            </tr>-->
+  
+            <div *ngIf="startTripFlow==true">
+                <tr>
+                    <td>Task Answer</td>
+                </tr>
+            </div>
+  
+        </table>
+        <div *ngIf="startTripFlow==true">
+            <textarea class="form-control" id="task_answer" name="task_answer" style="width: 100%" 
+                [(ngModel)]="task_answer" rows="3" cols= "100%" placeholder="Enter Task Answer"></textarea> 
+            
+        </div>
+        <div *ngIf="startTripFlow==true">
+            <button class="btn btn-danger" type="submit" style="float:left" (click)="createTaskData()">
+                 Add Task Answer
+            </button>
+        </div>
+
+    </div>
+  </div>

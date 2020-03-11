@@ -1,0 +1,18 @@
+#divider{
+    background-color:#dc3545;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+  }
+  
+  .btn-primary:hover {
+    background-color: #7a120b;; /* Green */
+    color: white;
+  }
+  

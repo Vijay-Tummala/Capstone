@@ -1,0 +1,78 @@
+import { MapserviceService } from './../mapservice.service';
+import { Component, OnInit, OnDestroy,Input } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+import { NgForm } from '@angular/forms';
+
+@Component({
+  selector: 'add-user',
+  templateUrl: './add-user.component.html',
+  styleUrls: ['./add-user.component.css']
+})
+export class AddUserComponent implements OnInit,OnDestroy {
+
+  _tripFromMap:string;
+
+  @Input()
+  set TripFromMap(message : string ){
+      this._tripFromMap = message; 
+  }
+  get TripFromMap(){
+      return this._tripFromMap;
+  }
+
+  users:any[];
+  filteredUsers:any[];
+  subscription: Subscription;
+  constructor(private appService: MapserviceService) {
+    this.subscription = appService.getAllUsers().subscribe(res=>{
+      this.filteredUsers = this.users=res;
+      console.log(this.users);
+    });
+   }
+
+   filter(query:String){
+     console.log("query",query);
+    this.filteredUsers = (query)?
+    this.users.filter(p=>p.FirstName.toLowerCase().includes(query.toLowerCase())):this.users;
+  }
+
+
+  submit(DataFromForm: NgForm){
+    console.log("DataFromForm ",DataFromForm.value);
+  }
+
+  showSuccess(DataFromForm: NgForm)
+  {
+   var myList1 =  Object.keys(DataFromForm.value); 
+   var myList2 = [];
+   
+
+    for(var i=0;i<myList1.length;i++){
+        if(DataFromForm.value[myList1[i]]===true){
+          var myDataObj = {UserID:"",TripID:""};
+          myDataObj["UserID"]=this.filteredUsers[i].UserID;
+          myDataObj["TripID"]=this.TripFromMap;
+          myList2.push(myDataObj);
+        }
+    }
+
+    console.log("myList1 ",myList1);
+    console.log("myList2 ",myList2);
+    console.log("DataFromForm ",DataFromForm.value);
+    console.log(this.filteredUsers);
+
+    console.log("going to add user",myList2);
+    this.appService.addUsers(myList2,this.TripFromMap).subscribe(
+      res =>{
+        console.log("res of add user", res);
+      });
+
+  
+  }
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
+  }
+  ngOnInit() {
+  }
+
+}

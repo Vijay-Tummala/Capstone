@@ -1,0 +1,121 @@
+import { Injectable } from '@angular/core';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { Trip } from './trip';
+import { Stop } from './stop';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+
+import 'rxjs/add/operator/map'
+
+@Injectable()
+export class MapserviceService {
+
+  constructor(private http: Http) { }
+
+  getTrip(){
+
+    return this.http.get('http://13.59.46.246:3000/Trips/getAllTrip')
+  .map(res => res.json());
+
+  }
+
+  getTripById(tripid)
+  {
+    console.log("service" + tripid)
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post('http://13.59.46.246:3000/Trips/getTripById/'+tripid, {headers:headers})
+    .map(res => res.json());
+  }
+
+  createNewTrip(newTrip){
+    console.log(newTrip)
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post('http://13.59.46.246:3000/Trips/addTrip', newTrip, {headers: headers})
+    .map(res => res.json());
+  }
+
+  addNewStop(newStop){
+    console.log(newStop);
+      console.log("in add new call");
+      var headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      return this.http.post('http://13.59.46.246:3000/trips/'+newStop.TripID+'/stops', JSON.stringify(newStop), {headers: headers}) 
+    }
+  
+    getStops(id){
+      console.log("id in getStope",id);
+      return this.http.get('http://13.59.46.246:3000/trips/'+id+'/stops')
+      .map(res => res.json());
+    
+      }
+  
+  
+      getStopByStopID(id){
+        console.log("id in stop",id);
+        return this.http.get('http://13.59.46.246:3000/trips/stops/'+id) .map(res => res.json());
+      }
+  
+      deleteStopByStopID(id){
+          console.log("id in stop",id);
+          return this.http.delete('http://13.59.46.246:3000/trips/stops/'+id) .map(res => res.json());
+      }
+  
+    updateStopByStopID(stop,id){
+            var headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+            return this.http.put('http://13.59.46.246:3000/trips/stops/'+id,JSON.stringify(stop),{headers: headers}).map(res => res.json());
+      }
+
+  updateStopWithStopID(stop,stop_id): Observable<Stop>{ 
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.put(
+        "http://13.59.46.246:3000/trips/stops/"+stop_id,
+        stop,
+        options
+    ).map(res => res.json());
+  }
+
+  getAllUsers(){
+    return this.http.get('http://13.59.46.246:3000/members').map(res=>res.json());
+  }
+
+  createNewEmergencyContact(newContact){
+
+    console.log("in contact service",newContact);
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post('http://13.59.46.246:3000/trips/'+newContact.TripID+'/emergencyContact', JSON.stringify(newContact), {headers: headers}) 
+
+    }
+
+    addUsers(newUserList,TripID){
+      console.log("in add user ",newUserList);
+      var headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      return this.http.post('http://13.59.46.246:3000/trips/'+TripID+'/users', JSON.stringify(newUserList), {headers: headers}) 
+      }
+
+    // Send trip data to remote server to update it.
+    updateTrip(trip,trip_id): Observable<Trip>{
+ 
+      let headers = new Headers({ 'Content-Type': 'application/json' });
+      let options = new RequestOptions({ headers: headers });
+  
+      return this.http.put(
+          "http://13.59.46.246:3000/trips/updateTripByTrip?tripID="+trip_id,
+          trip,
+          options
+      ).map(res => res.json());
+    }      
+
+
+
+
+
+
+}

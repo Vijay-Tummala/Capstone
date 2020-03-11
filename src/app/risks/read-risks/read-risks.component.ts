@@ -1,0 +1,112 @@
+//import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, OnChanges, EventEmitter } from '@angular/core';
+import { RiskService } from '../../risk.service';
+import { Observable } from 'rxjs/Observable';
+import { Risk } from '../../risk';
+import {MapComponent} from '../../map/map.component'
+
+//import {MapserviceService} from '../../mapservice.service';
+//import { MapComponent } from '../../map/map.component';
+import {ActivatedRoute} from '@angular/router';
+ 
+@Component({
+    selector: 'app-read-risks',
+    templateUrl: './read-risks.component.html',
+    styleUrls: ['./read-risks.component.css'],
+    providers: [RiskService]
+})
+ 
+export class ReadRisksComponent implements OnChanges {
+ 
+    // store list of risks
+    //risks: Risk[];
+    /*
+    * Needed to notify the 'consumer of this component', which is the 'AppComponent',
+      that an 'event' happened in this component.
+*/
+    @Output() show_create_risk_event=new EventEmitter();
+    @Output() show_read_one_risk_event=new EventEmitter();
+    @Output() show_update_risk_event=new EventEmitter();
+    @Output() show_delete_risk_event=new EventEmitter();
+
+    // @Input means it will accept value from parent component (AppComponent)
+    @Input() risk_id;
+    @Input() riskTripID;
+    @Input() riskStopID;
+    @Input() startTripFlow;
+
+    risks = [];
+    mapObject:MapComponent;
+    tripID;
+    stopID;
+    // initialize riskService to retrieve list risks in the ngOnInit()
+    //add map component and stop component along with their services to read tripid and stopid
+    constructor(
+        private riskService: RiskService, 
+        private activeRoute:ActivatedRoute, 
+        private map:MapComponent
+    ){
+        
+        this.mapObject=map;
+        this.tripID=this.mapObject.riskTripID;
+        
+        this.stopID=this.mapObject.riskStopID;this.startTripFlow=this.mapObject.startTripFlow;
+        console.log("checking for starttripflow: " + this.mapObject.startTripFlow);
+
+
+        console.log("checking input in risk constructor: " + this.mapObject.riskTripID);
+        console.log("checking input in risk constructor: " + this.mapObject.riskTripID);
+    }
+ 
+    // methods that we will use later
+    // when user clicks the 'create' button
+    createRisk(){
+      // tell the parent component (AppComponent)
+      this.show_create_risk_event.emit({
+          title: "Add Risk"
+      });
+    }
+    
+    // when user clicks the 'read' button
+    readOneRisk(id){
+      console.log('rp comp readOneRisk');
+      console.log(id);
+      // tell the parent component (AppComponent)
+      this.show_read_one_risk_event.emit({
+          risk_id: id,
+          title: "Read One Risk"
+      });
+    }
+
+    // when user clicks the 'update' button
+    updateRisk(id){
+      // tell the parent component (AppComponent)
+      this.show_update_risk_event.emit({
+          risk_id: id,
+          title: "Update Risk"
+      });
+      console.log("update1"+id);
+    }
+    
+    // when user clicks the 'delete' button
+    deleteRisk(id){
+      // tell the parent component (AppComponent)
+      this.show_delete_risk_event.emit({
+          risk_id: id,
+          title: "Delete Risk"
+      });
+    }
+ 
+    // Read risks from API.
+    ngOnChanges(){
+        //pass stopid and trip id 
+        //this.riskService.readRisks()
+        console.log(this.mapObject.riskStopID);
+        console.log(this.mapObject.riskTripID);
+        this.riskService.readRisks(this.mapObject.riskTripID,this.mapObject.riskStopID)
+            .subscribe(risksInit => {
+              this.risks=risksInit
+              console.log(risksInit)
+            });
+    }
+}

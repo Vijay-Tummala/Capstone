@@ -1,0 +1,71 @@
+<div class="modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" id="addUser">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h5 class="modal-title">Add Members</h5>  
+      </div>
+      <form #userForm="ngForm"> 
+      <div class="modal-body" id="summary-modal" >
+          
+          <p id="search">
+              <input #query1 id="searchBox1" type="text" class="form-control" (keyup)="filter(query1.value)" placeholder="Search Members">
+           </p> 
+            
+           <ul class="list-group list-group-flush" *ngFor="let user of filteredUsers;index as i">
+             <li class="list-group-item">
+                <div class="checkbox"><label for="user"><input type="checkbox" ngModel name="userInfo{{i}}">
+                  {{user.FirstName}} {{user.LastName}}
+                </label>
+              </div>
+
+             </li>
+           </ul>
+          
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary mr-auto" data-toggle="modal" data-target="#emergencyContact" data-dismiss="modal">Previous</button>
+        <button type="submit" class="btn btn-danger float-right" data-toggle="modal" data-dismiss="modal" data-target="#success" (click)="showSuccess(userForm)" >Save</button>
+      </div>
+    </form>
+    </div>
+  </div>
+  </div>
+  
+
+      <!-- edit trip add users-->   
+      <div class="modal fade" style="overflow-y: scroll;" tabindex="-1" role="dialog" id="addUser1" aria-labelledby="addUser1Title" aria-hidden="true" data-backdrop="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Members</h5>  
+            </div>
+            <form #userForm1="ngForm"> 
+            <div class="modal-body" id="summary-modal" >
+                
+                <p id="search">
+                    <input #query id="searchBox" type="text" class="form-control" (keyup)="filter(query.value)" placeholder="Search Members">
+                 </p> 
+                  
+                 <ul class="list-group list-group-flush" *ngFor="let user of filteredUsers;index as i">
+                   <li class="list-group-item">
+                      <div class="checkbox"><label for="user"><input type="checkbox" ngModel name="userInfo{{i}}">
+                        {{user.FirstName}} {{user.LastName}}
+                      </label>
+                    </div>
+      
+                   </li>
+                 </ul>
+                
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#EditPartDataModal" data-dismiss="modal" >Back To Trip Participants</button>
+              <button type="submit" class="btn btn-danger" data-toggle="modal" data-target="#EditPartDataModal" data-dismiss="modal" (click)="addPartEditTrip(userForm1)" >Save</button>
+            </div>
+          </form>
+          </div>
+        </div>
+        </div>     
+
+
+
+  
